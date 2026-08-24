@@ -55,17 +55,31 @@ export function notifyDiscord({ text, photos = [], state = null }) {
 }
 
 /**
+ * Region code for channel routing: US state (2-letter), 'ON' for Ontario,
+ * 'NZ' for New Zealand, '' when unmatched (→ the #uncharted-waters default).
+ */
+export function regionForNotification(state = '', country = '') {
+  const us = normalizeUSState(state)   // also passes through any 2-letter code (e.g. ON)
+  if (us) return us
+  const c = String(country || '').trim().toUpperCase()
+  const s = String(state || '').trim().toUpperCase()
+  if (c === 'NZ') return 'NZ'
+  if (s === 'ONTARIO' || (c === 'CA' && s.startsWith('ONT'))) return 'ON'
+  return ''
+}
+
+/**
  * Fire-and-forget notification for a submission. Reverse-geocodes a place
- * label (5 s), derives the 2-letter state and posts to Discord. Never throws.
+ * label (5 s), derives the region code and posts to Discord. Never throws.
  */
 export async function notifySubmission({
   isExistingPin, reportType, signType = '', signText = '', locationDescription = '',
-  submitterName = 'anonymous', lat, lng, state = '', photoUrls = [], source = 'submission',
+  submitterName = 'anonymous', lat, lng, state = '', country = '', photoUrls = [], source = 'submission',
 }) {
   try {
     const place = await withTimeout(reverseGeocodePlace(lat, lng), 5000, 'notify:revgeo')
     const text = buildReportNotificationMessage({ isExistingPin, reportType, place, signType, signText, locationDescription, submitterName, lat, lng })
-    const payload = { text, photos: (photoUrls || []).slice(0, 4), state: normalizeUSState(state) }
+    const payload = { text, photos: (photoUrls || []).slice(0, 4), state: regionForNotification(state, country) }
     notifyDiscord(payload).catch((e) => logger.warn(`${source} Discord notify failed (non-blocking)`, e))
   } catch (e) {
     logger.warn(`${source} notify payload build failed (non-blocking)`, e)

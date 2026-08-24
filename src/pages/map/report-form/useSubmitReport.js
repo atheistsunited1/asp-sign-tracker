@@ -315,6 +315,7 @@ export function useSubmitReport({ form, photos, user, userProfile, showToast, lo
         locationDescription: form.locationDescription.value || form.selectedPin.value?.description || '',
         submitterName, lat, lng,
         state: result.state || form.selectedPin.value?.state || '',
+        country: result.country || '',
         photoUrls,
         source: 'ReportForm',
       })

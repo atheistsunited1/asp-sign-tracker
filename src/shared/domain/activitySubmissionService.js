@@ -112,10 +112,10 @@ export async function submitActivity({
   const shouldMerge = isExistingPin && mergeIntoPending && isPendingPin(existingPin)
   const visuals = deriveSubmissionVisuals({ reportType: fields.reportType, signType: fields.signType, existingPin })
 
-  // Best-effort city/state for NEW pins (never blocks).
-  let city = null, state = null
+  // Best-effort city/state (+ country, for notification routing) for NEW pins (never blocks).
+  let city = null, state = null, country = null
   if (!isExistingPin) {
-    try { ({ city, state } = await withTimeout(reverseGeocodeCityState(lat, lng), T.revgeo, 'submit:revgeo')) } catch {}
+    try { ({ city, state, country } = await withTimeout(reverseGeocodeCityState(lat, lng), T.revgeo, 'submit:revgeo')) } catch {}
   }
 
   // A) new pin
@@ -176,5 +176,5 @@ export async function submitActivity({
     } catch (e) { noteError = e }
   }
 
-  return { pinId, reportId, pinRow, city, state, lat, lng, isExistingPin, merged, visuals, noteError }
+  return { pinId, reportId, pinRow, city, state, country, lat, lng, isExistingPin, merged, visuals, noteError }
 }
