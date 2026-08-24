@@ -25,3 +25,21 @@
   from = "/*"
   to = "/index.html"
   status = 200
+
+# Security headers (tracked in the public repo's issue #5).
+# CSP allowlist derived from actual app usage:
+#   connect: Supabase (REST/auth/storage/functions), Nominatim reverse geocoding
+#   img: self + Supabase storage, OSM tiles, USGS satellite tiles, Google photo
+#        hosts (mirror-photo falls back to the source URL when mirroring fails),
+#        data:/blob: for bundled Leaflet assets and local photo previews
+#   No external scripts, styles, fonts, frames, workers, or realtime sockets.
+#   'unsafe-inline' styles: Vue/Leaflet set inline style attributes.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://nouzhcobeeakhmokhidc.supabase.co https://*.tile.openstreetmap.org https://basemap.nationalmap.gov https://lh3.googleusercontent.com https://mymaps.usercontent.google.com; connect-src 'self' https://nouzhcobeeakhmokhidc.supabase.co https://nominatim.openstreetmap.org; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; manifest-src 'self'"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(self)"
+    Strict-Transport-Security = "max-age=31536000"
