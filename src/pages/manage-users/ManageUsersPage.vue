@@ -158,7 +158,7 @@ async function loadUsers() {
   loadingUsers.value = true
   const { data, error } = await listAllUsers()
   if (error) { showToast(errorToUserMessage(error, 'Failed to load users.'), 'error'); users.value = [] }
-  else users.value = (data || []).map(u => ({ ...u, role: normalizeRole(u.role) }))
+  else users.value = (data || []).filter(u => u.is_approved === true).map(u => ({ ...u, role: normalizeRole(u.role) })) // approved only; pending live above
   loadingUsers.value = false
 }
 
