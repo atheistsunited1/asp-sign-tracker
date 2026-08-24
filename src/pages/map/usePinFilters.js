@@ -147,7 +147,7 @@ export function usePinFilters(ctx) {
   watch(bookmarkedOnly, v => {
     if (v && !ctx.bookmarksAvailable.value) {
       bookmarkedOnly.value = false
-      ctx.showToast('Bookmarks are unavailable until DB migration is applied.', 'info')
+      ctx.showToast('Bookmarks are unavailable right now.', 'info')
       return
     }
     try { localStorage.setItem(LS_KEYS.bookmarkedOnly, String(v)) } catch {}

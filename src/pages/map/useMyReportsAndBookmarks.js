@@ -121,7 +121,7 @@ export function useMyReportsAndBookmarks(ctx) {
         bookmarksAvailable.value = false
         if (!bookmarkWarnedMissing) {
           bookmarkWarnedMissing = true
-          ctx.showToast('Bookmarks are unavailable until DB migration is applied.', 'info')
+          ctx.showToast('Bookmarks are unavailable right now.', 'info')
         }
       } else {
         logger.warn('Map failed to load bookmarks', err)
@@ -145,7 +145,7 @@ export function useMyReportsAndBookmarks(ctx) {
       return
     }
     if (!bookmarksAvailable.value) {
-      ctx.showToast('Bookmarks are unavailable until DB migration is applied.', 'info')
+      ctx.showToast('Bookmarks are unavailable right now.', 'info')
       return
     }
 
@@ -169,7 +169,7 @@ export function useMyReportsAndBookmarks(ctx) {
     } catch (err) {
       if (isMissingRelationError(err)) {
         bookmarksAvailable.value = false
-        ctx.showToast('Bookmarks are unavailable until DB migration is applied.', 'info')
+        ctx.showToast('Bookmarks are unavailable right now.', 'info')
         return
       }
       logger.error('Map bookmark toggle failed', err)

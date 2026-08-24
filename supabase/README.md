@@ -27,10 +27,10 @@ sole canonical schema snapshot
 The current canonical baseline is version `0`:
 
 ```text
-baseline_id: 20260824_au_reconciliation_02
+baseline_id: 20260824_production_baseline_01
 schema file: db-snapshot/2026-08-24-16-30-00-database.sql
 version:     0
-last patch: baseline_20260824_au_reconciliation_02
+last patch: baseline_20260824_production_baseline_01
 ```
 
 ## Versioned patch contract
