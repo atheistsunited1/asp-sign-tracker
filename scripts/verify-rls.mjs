@@ -97,6 +97,15 @@ async function anonProbes() {
     record(actor, 'cannot execute purge_soft_deleted_rows', !!error, error?.code ?? 'EXECUTED')
   }
   {
+    // Public activity RPCs (patch 3): anon may call them; they return only the
+    // approved subset, while direct table reads stay closed (probed above).
+    const zero = '00000000-0000-0000-0000-000000000000'
+    const { error: repErr } = await anon.rpc('public_reports_for_pins', { p_pin_ids: [zero] })
+    record(actor, 'may call public_reports_for_pins', !repErr, repErr?.code ?? 'ok')
+    const { error: phErr } = await anon.rpc('public_photos_for_reports', { p_report_ids: [zero] })
+    record(actor, 'may call public_photos_for_reports', !phErr, phErr?.code ?? 'ok')
+  }
+  {
     // Email-only login: the username → email lookup RPC must not exist (it was an
     // anon-callable enumeration surface). PGRST202 = function not found.
     const { error } = await anon.rpc('login_email_for_username', { u: '__rls_verify_nobody__' })

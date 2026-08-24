@@ -37,7 +37,7 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://nouzhcobeeakhmokhidc.supabase.co https://*.tile.openstreetmap.org https://basemap.nationalmap.gov https://lh3.googleusercontent.com https://mymaps.usercontent.google.com; connect-src 'self' https://nouzhcobeeakhmokhidc.supabase.co https://nominatim.openstreetmap.org; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; manifest-src 'self'"
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://nouzhcobeeakhmokhidc.supabase.co https://tile.openstreetmap.org https://*.tile.openstreetmap.org https://basemap.nationalmap.gov https://lh3.googleusercontent.com https://mymaps.usercontent.google.com; connect-src 'self' https://nouzhcobeeakhmokhidc.supabase.co https://nominatim.openstreetmap.org; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; manifest-src 'self'"
     X-Content-Type-Options = "nosniff"
     X-Frame-Options = "DENY"
     Referrer-Policy = "strict-origin-when-cross-origin"

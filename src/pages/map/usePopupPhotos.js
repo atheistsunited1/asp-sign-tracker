@@ -11,6 +11,8 @@ import {
   fetchPinById,
   fetchPinsPage,
   fetchPhotoRowsForReportIds,
+  fetchPublicPhotosForReports,
+  fetchPublicReportsForPins,
   fetchReportIdsForPin,
   fetchReportedPinIdsByUser,
   fetchReportsForPin as fetchReportsForPinSvc,
@@ -159,10 +161,14 @@ export function usePopupPhotos(ctx) {
 
     el.innerHTML = '⏳ Loading all photos…'
 
+    // Guests can't read the reports/photos tables (RLS is members-only): they
+    // go through the SECURITY DEFINER RPCs, which return the approved subset.
+    const isGuest = !ctx.currentUser?.value?.id
+
     // helper to run the photos query with a selectable timeout
     const fetchPhotos = async (reportIds, ms) => {
       const p = await withTimeout(
-        fetchPhotoRowsForReportIds(reportIds),
+        isGuest ? fetchPublicPhotosForReports(reportIds) : fetchPhotoRowsForReportIds(reportIds),
         ms,
         `photos:images ${pinId}`
       )
@@ -175,7 +181,7 @@ export function usePopupPhotos(ctx) {
       let reportIds = Array.isArray(knownReportIds) ? knownReportIds : null
       if (!reportIds || reportIds.length === 0) {
         const res = await withTimeout(
-          fetchReportIdsForPin(pinId),
+          isGuest ? fetchPublicReportsForPins([pinId]) : fetchReportIdsForPin(pinId),
           3500,                       // a little more generous here
           `photos:reports ${pinId}`
         )

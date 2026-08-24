@@ -3,6 +3,10 @@ import { supabase } from '@/shared/data/supabase'
 const table = () => supabase.from('photos')
 
 export const photosRepo = {
+  /** Photos of approved reports of approved pins (SECURITY DEFINER RPC, guest-safe). */
+  rpcPublicPhotosForReports(reportIds = []) {
+    return supabase.rpc('public_photos_for_reports', { p_report_ids: reportIds })
+  },
   table,
   insert(rows) {
     return table().insert(rows)
