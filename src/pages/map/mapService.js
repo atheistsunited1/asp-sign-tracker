@@ -103,6 +103,16 @@ export function fetchReportIdsForPin(pinId, { approvedOnly = false, limit = 50 }
   return q
 }
 
+/** Guest-safe: approved reports of approved pins via SECURITY DEFINER RPC. */
+export function fetchPublicReportsForPins(pinIds) {
+  return reportsRepo.rpcPublicReportsForPins(pinIds)
+}
+
+/** Guest-safe: photos of approved reports via SECURITY DEFINER RPC. */
+export function fetchPublicPhotosForReports(reportIds) {
+  return photosRepo.rpcPublicPhotosForReports(reportIds)
+}
+
 export function fetchPhotoRowsForReportIds(reportIds, { limit = 100 } = {}) {
   return photosRepo
     .table()

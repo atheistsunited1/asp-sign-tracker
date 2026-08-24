@@ -93,6 +93,7 @@ export function useTapChooser(ctx) {
     try {
       const { latestReportByPin, photosByPin } = await fetchNearbyPinsEnrichment(ids, {
         reportLimitPerPin: 5, photoLimitPerPin: 3,
+        publicOnly: !ctx.currentUser?.value?.id,
       })
       if (seq !== tapChooserEnrichSeq || !tapChooser.value.visible) return
       tapChooser.value = {

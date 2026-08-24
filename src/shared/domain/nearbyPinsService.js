@@ -44,7 +44,7 @@ export function fetchPinsNearCoords(lat, lng, { latDelta = 0.0005, lngDelta = 0.
 
 export async function fetchNearbyPinsEnrichment(
   pinIds = [],
-  { reportLimitPerPin = 5, photoLimitPerPin = 3 } = {},
+  { reportLimitPerPin = 5, photoLimitPerPin = 3, publicOnly = false } = {},
 ) {
   const normalizedPinIds = Array.isArray(pinIds) ? pinIds.filter(Boolean) : []
   const latestReportByPin = new Map()
@@ -56,13 +56,17 @@ export async function fetchNearbyPinsEnrichment(
     return { latestReportByPin, photosByPin }
   }
 
-  const { data: reports, error: reportsError } = await reportsRepo
-    .table()
-    .select('id, pin_id, report_type, occurred_on, created_at')
-    .in('pin_id', normalizedPinIds)
-    .eq('is_deleted', false)
-    .order('occurred_on', { ascending: false })
-    .order('created_at', { ascending: false })
+  // Guests can't read the reports/photos tables (RLS is members-only); the
+  // SECURITY DEFINER RPCs return the approved subset instead.
+  const { data: reports, error: reportsError } = publicOnly
+    ? await reportsRepo.rpcPublicReportsForPins(normalizedPinIds)
+    : await reportsRepo
+      .table()
+      .select('id, pin_id, report_type, occurred_on, created_at')
+      .in('pin_id', normalizedPinIds)
+      .eq('is_deleted', false)
+      .order('occurred_on', { ascending: false })
+      .order('created_at', { ascending: false })
 
   if (reportsError) throw reportsError
 
@@ -86,11 +90,13 @@ export async function fetchNearbyPinsEnrichment(
     return { latestReportByPin, photosByPin }
   }
 
-  const { data: photos, error: photosError } = await photosRepo
-    .table()
-    .select('image_url, report_id, created_at')
-    .in('report_id', reportIdsForPhotos)
-    .order('created_at', { ascending: false })
+  const { data: photos, error: photosError } = publicOnly
+    ? await photosRepo.rpcPublicPhotosForReports(reportIdsForPhotos)
+    : await photosRepo
+      .table()
+      .select('image_url, report_id, created_at')
+      .in('report_id', reportIdsForPhotos)
+      .order('created_at', { ascending: false })
 
   if (photosError) throw photosError
 
