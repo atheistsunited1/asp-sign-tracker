@@ -97,8 +97,11 @@ async function anonProbes() {
     record(actor, 'cannot execute purge_soft_deleted_rows', !!error, error?.code ?? 'EXECUTED')
   }
   {
+    // Email-only login: the username → email lookup RPC must not exist (it was an
+    // anon-callable enumeration surface). PGRST202 = function not found.
     const { error } = await anon.rpc('login_email_for_username', { u: '__rls_verify_nobody__' })
-    record(actor, 'may call login_email_for_username', !error, error?.message ?? '')
+    const absent = error?.code === 'PGRST202' || /Could not find the function/i.test(error?.message ?? '')
+    record(actor, 'login_email_for_username does not exist', absent, error?.message ?? 'RPC EXISTS')
   }
 }
 
