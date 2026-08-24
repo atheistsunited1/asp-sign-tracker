@@ -132,7 +132,7 @@ const props = defineProps({
   visible: Boolean,
   coords: { type: String, default: '' },
   nearbyPins: { type: Array, default: () => [] },
-  // Tap-disambiguation mode (#18): choose-a-pin only — no report-flow actions.
+  // Tap-disambiguation mode: choose-a-pin only — no report-flow actions.
   pickOnly: { type: Boolean, default: false },
 })
 
@@ -255,7 +255,7 @@ function lastActivityLabelFor(pin) {
 
 const pinCards = computed(() => {
   const source = Array.isArray(props.nearbyPins) ? props.nearbyPins : []
-  // Newest-first by last activity regardless of which caller built the list (#55).
+  // Newest-first by last activity regardless of which caller built the list.
   return sortPinsByLastActivity(source).map((pin) => {
     // 'plundered' | 'krakened' | null. findNearbyPins attaches lifecycle_state;
     // the tap chooser's in-memory pins carry icon_type instead.

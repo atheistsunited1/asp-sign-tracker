@@ -1,4 +1,4 @@
-// Description lines → activities + pin description + gsv_date (plan #93 D4–D6).
+// Description lines → activities + pin description + gsv_date.
 //
 // Line grammar (My Maps descriptions, observed over 12k placemarks):
 //   Reported|Recorded MM/DD/YY by ASP (XX) [via GSV dated Mon YYYY | via … FB dated MM/DD/YY]

@@ -32,7 +32,7 @@
           </div>
         </div>
 
-        <!-- Quick updates carry no free text of their own; a note is appended, dated, to the pin's description (#66) -->
+        <!-- Quick updates carry no free text of their own; a note is appended, dated, to the pin's description -->
         <div class="field" v-if="isExistingQuickAction">
           <label>Add a note (optional)</label>
           <input
@@ -213,7 +213,7 @@
 
   <!-- Photo picker. Opened programmatically (openGalleryPicker); it sits
        outside #report-form, so hide it explicitly or it renders as a stray
-       native "Choose Files" control below the map (#60). -->
+       native "Choose Files" control below the map. -->
   <input
     type="file"
     accept="image/*"

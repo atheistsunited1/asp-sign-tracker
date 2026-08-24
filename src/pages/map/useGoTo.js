@@ -1,5 +1,5 @@
 // Jump-to box: coordinate / pin-id / address suggestions (local + geocoder), choose & focus a pin.
-// Extracted verbatim from MapPage.vue (issue #97 step 2). Shared map state is on
+// Extracted verbatim from MapPage.vue. Shared map state is on
 // `ctx` (see mapContext.js): other composables' members are referenced as
 // `ctx.<name>`; mutable shared lets live on `ctx.state`.
 import { ref } from 'vue'
@@ -146,7 +146,7 @@ export function useGoTo(ctx) {
     let pinCount = 0
     // Pins match by Pin ID only (exact, or prefix when fuzzy matching is allowed).
     // Every pin has a Pin ID (generated from short_num), so UUIDs are neither
-    // matched nor shown — matching UUID fragments produced noisy results (#69).
+    // matched nor shown — matching UUID fragments produced noisy results.
     for (const [pid, marker] of ctx.pinMarkerMap) {
       if (pinCount >= maxPins) break
       const fid = String(marker?.__friendlyId || '')
@@ -308,7 +308,7 @@ export function useGoTo(ctx) {
       clearGoToTemporaryPinVisibility()
       return
     }
-    // Prefix matching on Pin IDs is quiet enough to run while typing (#69); the
+    // Prefix matching on Pin IDs is quiet enough to run while typing; the
     // "exact only while typing" guard existed for the old UUID-substring noise.
     refreshGoToSuggestions({ allowPinFuzzy: true }).catch(() => {})
   }

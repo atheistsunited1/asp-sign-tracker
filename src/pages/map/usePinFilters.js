@@ -1,5 +1,5 @@
 // Legend categories, tray filters (city/state/country), Major-campaign / my-reports / bookmarked toggles, persistence and the filter vocabulary.
-// Extracted verbatim from MapPage.vue (issue #97 step 2). Shared map state is on
+// Extracted verbatim from MapPage.vue. Shared map state is on
 // `ctx` (see mapContext.js): other composables' members are referenced as
 // `ctx.<name>`; mutable shared lets live on `ctx.state`.
 import { ref, computed, watch } from 'vue'

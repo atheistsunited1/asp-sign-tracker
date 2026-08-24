@@ -8,7 +8,7 @@ const DATE_ONLY_RE = /^(\d{4})-(\d{2})-(\d{2})$/
 
 /**
  * Date-only values (`occurred_on`, `gsv_date`: "YYYY-MM-DD") are calendar dates, not instants — parse them in local
- * time. `new Date('2026-08-22')` would be UTC midnight and render as Aug 21 in US zones (#126).
+ * time. `new Date('2026-08-22')` would be UTC midnight and render as Aug 21 in US zones.
  */
 function toDate(v) {
   if (v == null || v === '') return null

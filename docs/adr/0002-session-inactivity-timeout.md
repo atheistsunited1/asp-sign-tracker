@@ -6,7 +6,7 @@ Status: accepted
 ## Context
 
 The Feb 2026 UI review asked whether members should be logged out after a
-period of inactivity (issue #65). The app is a Vue SPA using supabase-js with
+period of inactivity. The app is a Vue SPA using supabase-js with
 `persistSession` and `autoRefreshToken`; by default a session lives as long as
 its refresh token keeps being used, i.e. indefinitely. Members use the app on
 personal phones in the field; a modal "you will be logged out" warning was

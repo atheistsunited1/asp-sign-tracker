@@ -32,7 +32,7 @@
             <div v-else>
               <div v-if="!reports.length" class="muted">No activity yet.</div>
 
-              <!-- One row per activity: type · date · member · photos. No free text (#66). -->
+              <!-- One row per activity: type · date · member · photos. No free text. -->
               <div v-for="r in orderedReports" :key="r.id" class="activity-row">
                 <div class="a-head">
                   <span class="pill" :class="`pill--${(r.report_type || 'sighting').toLowerCase()}`">
@@ -170,7 +170,7 @@ async function loadHistory(token) {
 .pill--krakened  { background: #233b46; color: #b8f0ff; border-color: #3e6473; }
 .pin-badges { margin-top: 4px; }
 
-/* Phones: full-screen sheet below the top bar; header stays put, body scrolls (#66 / plan #93) */
+/* Phones: full-screen sheet below the top bar; header stays put, body scrolls */
 @media (max-width: 800px) {
   .modal-overlay { place-items: stretch; background: #1f1f1f; }
   .modal {

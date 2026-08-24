@@ -162,7 +162,7 @@ export async function submitActivity({
     reportId = data.id
   }
 
-  // B2) dated quick-update note on an existing pin (#66) — non-fatal, reported to the caller
+  // B2) dated quick-update note on an existing pin — non-fatal, reported to the caller
   let noteError = null
   const note = String(updateNote || '').trim()
   if (isExistingPin && note) {

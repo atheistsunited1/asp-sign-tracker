@@ -1,5 +1,5 @@
 // Tests for the shared sign-text autosuggest composable used by
-// ReportForm and BulkPhotoReports. Focused on issue #51: the list must not
+// ReportForm and BulkPhotoReports. Focused on a past regression: the list must not
 // reopen after choosing a suggestion until the text actually changes.
 import { describe, it, expect } from 'vitest'
 import { nextTick, ref } from 'vue'

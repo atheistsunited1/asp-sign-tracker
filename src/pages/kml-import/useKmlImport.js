@@ -1,4 +1,4 @@
-// KML import flow (plan #93 PR 3): one file → parse (pure) → layer + summary +
+// KML import flow: one file → parse (pure) → layer + summary +
 // flags → resolve flags inline → write pins/activities → queue photos.
 //
 // Ids are generated client-side so photo keys can be {pin}/{report}/… before the

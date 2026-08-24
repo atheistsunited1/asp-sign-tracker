@@ -1,5 +1,5 @@
 // Locate control: geolocation follow/passive states, camera moves, blue-dot layer.
-// Extracted verbatim from MapPage.vue (issue #97 step 2). Shared map state is on
+// Extracted verbatim from MapPage.vue. Shared map state is on
 // `ctx` (see mapContext.js): other composables' members are referenced as
 // `ctx.<name>`; mutable shared lets live on `ctx.state`.
 import { computed, watch } from 'vue'
@@ -9,7 +9,7 @@ import { createLocationLayer } from '@/pages/map/mapLocationLayer'
 export function useLocate(ctx) {
   const S = ctx.state
 
-  // ── Locate control (#68) ────────────────────────────────────────────────────
+  // ── Locate control ────────────────────────────────────────────────────
   // Geolocation state lives in the composable; drawing lives in the location
   // layer; this component only wires the button, the map camera and toasts.
   const geo = useGeolocation()

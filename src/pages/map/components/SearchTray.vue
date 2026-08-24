@@ -132,7 +132,7 @@
 
 <script setup>
 // Search & Filters tray: remote pin search with results, user/bookmark pills and city/state/country filters.
-// Reads the map page context (mapContext.js); extracted from MapPage.vue in #131 with its CSS.
+// Reads the map page context (mapContext.js); extracted from MapPage.vue with its CSS.
 import { inject } from 'vue'
 import { MAP_CTX } from '@/pages/map/mapContext'
 const ctx = inject(MAP_CTX)

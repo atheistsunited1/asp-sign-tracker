@@ -79,7 +79,7 @@
 
 <script setup>
 // Legend: counts by type (rows) vs approved/pending (columns), Major-campaign toggle, click-away backdrop.
-// Reads the map page context (mapContext.js); extracted from MapPage.vue in #131 with its CSS.
+// Reads the map page context (mapContext.js); extracted from MapPage.vue with its CSS.
 import { inject } from 'vue'
 import { MAP_CTX } from '@/pages/map/mapContext'
 const ctx = inject(MAP_CTX)

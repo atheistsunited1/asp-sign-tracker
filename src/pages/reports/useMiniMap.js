@@ -33,7 +33,7 @@ export function useMiniMap({ editing, selected, updateCoordLocale }) {
     if (map || !mapEl.value) return
     map = L.map(mapEl.value, { center: [0, 0], zoom: 2 })
     streetsLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap contributors' })
-    // USGS "Imagery Only": public domain, no key; cache ends at zoom 16 (upsampled beyond). See #67.
+    // USGS "Imagery Only": public domain, no key; cache ends at zoom 16 (upsampled beyond).
     satelliteLayer = L.tileLayer(
       'https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}',
       { maxNativeZoom: 16, maxZoom: 20, attribution: 'Imagery: USDA, USGS The National Map: Orthoimagery' },

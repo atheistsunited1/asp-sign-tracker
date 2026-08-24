@@ -1,7 +1,7 @@
 // The one place the app talks to the photo bucket. Every writer (ReportForm,
 // BulkPhotoReports, Reports add-photo, KML mirror) builds keys with buildPhotoKey()
 // and stores the resulting public URL in photos.image_url; cleanup turns URLs
-// back into keys with keyFromPublicUrl() (plan #93, PR 2).
+// back into keys with keyFromPublicUrl().
 import { supabase } from '@/shared/data/supabase'
 import { PHOTO_BUCKET, buildPhotoKey, keyFromPublicUrl, extForMime, newPhotoId } from '@/shared/data/photoKeys'
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * verify-rls.mjs — executable definition of done for the RLS hardening
- * (issue #7, patches 000001/000002).
+ * (RLS hardening).
  *
  * Probes the live Supabase REST API as each actor and checks that forbidden
  * operations fail and permitted ones succeed.

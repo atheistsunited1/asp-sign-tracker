@@ -214,7 +214,7 @@ max_frequency = "5s"
 # 4152127777 = "123456"
 
 # Configure logged in session timeouts.
-# Owner decision (#65): sign members out after 30 minutes of inactivity, enforced
+# Owner decision: sign members out after 30 minutes of inactivity, enforced
 # server-side (refresh fails once idle) rather than by a client timer. Hosted
 # projects: Pro-plan feature — apply via Dashboard > Authentication > Sessions or
 # `supabase config push`; the local stack reads this file directly.

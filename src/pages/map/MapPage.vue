@@ -24,7 +24,7 @@
 
 
     <!-- Vertical map controls -->
-    <!-- Locate: one stateful control (idle → locating → located → following/passive), see #68 -->
+    <!-- Locate: one stateful control (idle → locating → located → following/passive) -->
     <div id="map-controls">
       <button
         class="map-button light locate-btn"
@@ -50,7 +50,7 @@
     
     <!-- Layer controls -->
     <div id="layer-controls">
-      <!-- Basemap: one segmented control, active half highlighted (#67) -->
+      <!-- Basemap: one segmented control, active half highlighted -->
       <div class="basemap-seg" role="group" aria-label="Basemap">
         <button
           class="layer-btn seg-half"
@@ -116,7 +116,7 @@
     @submitted="() => {}"
   />
 
-  <!-- Tap disambiguation (#18): visually-overlapping pins at max zoom -->
+  <!-- Tap disambiguation: visually-overlapping pins at max zoom -->
   <NearbyPinSelector
     :visible="tapChooser.visible"
     :coords="tapChooser.coords"

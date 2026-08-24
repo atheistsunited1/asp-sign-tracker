@@ -1,5 +1,5 @@
 // Reports detail card: the shared coord-locale lookup (with city/state) plus
-// the "use this place as City/State" action on the editing draft (#74).
+// the "use this place as City/State" action on the editing draft.
 import { useCoordLocale as useSharedCoordLocale } from '@/shared/domain/useCoordLocale'
 
 export function useCoordLocale({ editing, showToast }) {

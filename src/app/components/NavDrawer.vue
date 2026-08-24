@@ -35,7 +35,7 @@
 </template>
 
 <script setup>
-// Menu drawer (#133): route actions with their role gates live in useShellNav.
+// Menu drawer: route actions with their role gates live in useShellNav.
 import { inject } from 'vue'
 import { APP_SHELL_CTX } from '@/app/shellContext'
 const { isAdmin, canUseMapOps, nav } = inject(APP_SHELL_CTX)
@@ -43,7 +43,7 @@ const { menuOpen, goReports, goBulkPhotoReports, goManageUsers, goDashboard, goK
 </script>
 
 <style>
-/* Moved from App.vue (#133). Global, not scoped — these selectors are also matched by other pages
+/* Moved from App.vue. Global, not scoped — these selectors are also matched by other pages
    (e.g. .tray-x / .tray-section in the map tray), so scoping would change them. */
 /* --- drawer --- */
 .drawer {

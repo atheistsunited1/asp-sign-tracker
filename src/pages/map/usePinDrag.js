@@ -1,5 +1,5 @@
 // Drag-to-relocate a pin from its popup and save the new position (relocate activity).
-// Extracted verbatim from MapPage.vue (issue #97 step 2). Shared map state is on
+// Extracted verbatim from MapPage.vue. Shared map state is on
 // `ctx` (see mapContext.js): other composables' members are referenced as
 // `ctx.<name>`; mutable shared lets live on `ctx.state`.
 import L from 'leaflet'
@@ -68,7 +68,7 @@ export function usePinDrag(ctx) {
 
     // Create a draggable ghost marker at the same position. The default icon's
     // 25×41 px box is a hopeless touch target — a finger missing it by a few px
-    // grabs the map and pans instead (#19). Wrap the default marker image in a
+    // grabs the map and pans instead. Wrap the default marker image in a
     // transparent padded hit box so the grab area is finger-sized; the visual
     // stays the stock blue marker, tip anchored on the latlng.
     const GHOST_HIT_PAD = 32
@@ -93,7 +93,7 @@ export function usePinDrag(ctx) {
 
     // The open popup's tip sits in the popup pane (above the marker pane),
     // exactly over the ghost's grab area — pointer-downs hit the tip instead of
-    // the ghost and the drag never starts (issue #19). Close it; dragend brings
+    // the ghost and the drag never starts. Close it; dragend brings
     // the Save Location popup, and Cancel lives there too.
     S.map.closePopup()
 

@@ -1,6 +1,6 @@
 // Nearby-pin queries shared by the map, the report form and bulk photo reports
 // (dedupe against existing pins; enrich candidates with their latest activity
-// and photos). Moved here in #97 step 0 because three pages needed it.
+// and photos). Shared because three pages need it.
 import { pinsRepo } from '@/shared/data/repos/pinsRepo'
 import { reportsRepo } from '@/shared/data/repos/reportsRepo'
 import { photosRepo } from '@/shared/data/repos/photosRepo'

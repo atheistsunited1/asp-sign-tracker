@@ -9,14 +9,14 @@ const LIMITS = { page: 400, vue: 600, composable: 300, service: 300 }
 
 // path (posix, relative to repo root) → reason. Remove an entry once the file is back under its guard.
 const EXCEPTIONS = {
-  'src/pages/bulk-photos/BulkPhotosPage.vue': '522: 243-line template + 229 lines of styles + wiring (#97 step 3)',
-  'src/pages/map/useGoTo.js': '421: verbatim extraction (#97 step 2); seams tracked in #131',
-  'src/pages/map/usePinActions.js': '406: verbatim extraction (#97 step 2); seams tracked in #131',
-  'src/pages/map/useLeafletMap.js': '376: 230-line onMounted wiring (#97 step 2); seams tracked in #131',
-  'src/pages/map/useMapSearch.js': '351: verbatim extraction (#97 step 2); seams tracked in #131',
-  'src/pages/map/usePinPopups.js': '342: verbatim extraction (#97 step 2); seams tracked in #131',
-  'src/pages/map/report-form/useSubmitReport.js': '349: submission orchestration + background guard + error formatting (#97 step 3)',
-  'src/shared/domain/activityLifecycleService.js': '335: approve / soft-delete / restore / force-delete / purge in one service (#97 step 1)',
+  'src/pages/bulk-photos/BulkPhotosPage.vue': '522: 243-line template + 229 lines of styles + wiring',
+  'src/pages/map/useGoTo.js': '421: verbatim extraction; further splits deferred',
+  'src/pages/map/usePinActions.js': '406: verbatim extraction; further splits deferred',
+  'src/pages/map/useLeafletMap.js': '376: 230-line onMounted wiring; further splits deferred',
+  'src/pages/map/useMapSearch.js': '351: verbatim extraction; further splits deferred',
+  'src/pages/map/usePinPopups.js': '342: verbatim extraction; further splits deferred',
+  'src/pages/map/report-form/useSubmitReport.js': '349: submission orchestration + background guard + error formatting',
+  'src/shared/domain/activityLifecycleService.js': '335: approve / soft-delete / restore / force-delete / purge in one service',
 }
 
 function walk(dir, out = []) {

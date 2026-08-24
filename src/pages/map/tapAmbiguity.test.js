@@ -1,4 +1,4 @@
-// Tests for the pure geographic tap-ambiguity decision logic (issue #18).
+// Tests for the pure geographic tap-ambiguity decision logic.
 import { describe, it, expect } from 'vitest'
 import {
   TAP_AMBIGUITY_RADIUS_M,

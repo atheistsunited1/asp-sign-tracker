@@ -1,5 +1,5 @@
-// Tap disambiguation for visually overlapping pins (#18).
-// Extracted verbatim from MapPage.vue (issue #97 step 2). Shared map state is on
+// Tap disambiguation for visually overlapping pins.
+// Extracted verbatim from MapPage.vue. Shared map state is on
 // `ctx` (see mapContext.js): other composables' members are referenced as
 // `ctx.<name>`; mutable shared lets live on `ctx.state`.
 import { ref } from 'vue'
@@ -15,7 +15,7 @@ import { fetchNearbyPinsEnrichment } from '@/shared/domain/nearbyPinsService'
 export function useTapChooser(ctx) {
   const S = ctx.state
 
-  // --- Tap disambiguation (#18) ---
+  // --- Tap disambiguation ---
   // Tunables and the pure gate live in tapAmbiguity.js. Ambiguity is a fixed
   // geographic radius (20 m) around the tapped location — never zoom-dependent,
   // and the map is never zoomed on the user's behalf. Below zoom 16 an
@@ -83,7 +83,7 @@ export function useTapChooser(ctx) {
 
   // The chooser opens instantly with in-memory pins (sorted by the pin's own
   // created_at); the latest-activity date/type and photos are patched in when
-  // the enrichment fetch returns, matching what the report-flow selector shows (#55).
+  // the enrichment fetch returns, matching what the report-flow selector shows.
   let tapChooserEnrichSeq = 0
 
   async function enrichTapChooserPins(pins) {

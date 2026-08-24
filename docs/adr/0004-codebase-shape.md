@@ -1,7 +1,7 @@
 # ADR-0004: Codebase shape — app / pages / shared
 
 - Status: accepted (2026-08-22)
-- Related: ADR-0003 (where logic runs), issue #97 (plan and steps), the structural-PR workflow in `CONTRIBUTING.md`
+- Related: ADR-0003 (where logic runs), the structural-PR workflow in `CONTRIBUTING.md`
 
 ## Context
 
@@ -69,7 +69,7 @@ fixtures in `__fixtures__/`; all imports use the `@/` alias (`@/shared/lib/date`
 
 - The contract is enforced: `eslint.config.js` encodes §1–§3 as `no-restricted-imports` patterns per layer (imports
   use the `@/` alias, so no resolver is needed) and `scripts/check-sizes.mjs` encodes §6 with a list of documented
-  exceptions; `npm run lint` runs both and is the first step of `npm run build` (#97 step 4). The README "Repo
+  exceptions; `npm run lint` runs both and is the first step of `npm run build`. The README "Repo
   layout" must match the tree.
 - Every structural PR posts a touch-point manifest before code moves and stays behaviour-neutral —
   duplicates removed, size guards met, docs current (workflow in `CONTRIBUTING.md`).

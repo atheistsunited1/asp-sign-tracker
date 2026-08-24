@@ -1,4 +1,4 @@
-// Geolocation state machine for the map's Locate control (#68).
+// Geolocation state machine for the map's Locate control.
 //
 // Modeled on the Google Maps / Mapbox GeolocateControl behavior:
 //   idle ──tap──▶ locating ──fix──▶ located ──tap──▶ following

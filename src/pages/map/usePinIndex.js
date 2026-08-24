@@ -1,5 +1,5 @@
 // Marker spatial index (grid cells) and filter-pass sets used by redraw and the legend counts.
-// Extracted verbatim from MapPage.vue (issue #97 step 2). Shared map state is on
+// Extracted verbatim from MapPage.vue. Shared map state is on
 // `ctx` (see mapContext.js): other composables' members are referenced as
 // `ctx.<name>`; mutable shared lets live on `ctx.state`.
 import { clampLat, normalizeLng } from '@/shared/lib/coords'

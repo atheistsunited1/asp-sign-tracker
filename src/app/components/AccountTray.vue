@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-// Account tray (#65, #133): who is signed in, reset password, log out.
+// Account tray: who is signed in, reset password, log out.
 import { inject, computed } from 'vue'
 import { APP_SHELL_CTX } from '@/app/shellContext'
 import SideTray from '@/app/components/SideTray.vue'
@@ -53,7 +53,7 @@ const memberSinceLabel = computed(() => {
 </script>
 
 <style>
-/* Moved from App.vue (#133). Global, not scoped — these selectors are also matched by other pages
+/* Moved from App.vue. Global, not scoped — these selectors are also matched by other pages
    (e.g. .tray-x / .tray-section in the map tray), so scoping would change them. */
 .kv{ display:grid; grid-template-columns:96px 1fr; gap:8px; align-items:center; }
 .kv-label{ color:#9aa3af; font-size:12px; text-transform:uppercase; letter-spacing:.06em; }

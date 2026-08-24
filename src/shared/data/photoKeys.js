@@ -1,5 +1,5 @@
 // Pure helpers for photo object keys in the `sign-photos` bucket (no Supabase import,
-// so they are unit-testable). One scheme for every writer (plan #93, PR 2):
+// so they are unit-testable). One scheme for every writer:
 //
 //   {pin_id}/{report_id}/{photo_id}.{ext}
 //

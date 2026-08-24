@@ -143,7 +143,7 @@ async function checkAvailability () {
 async function onLogin () {
   busy.value = true
   try {
-    // Email-only login (#142): the username → email lookup RPC was an
+    // Email-only login: the username → email lookup RPC was an
     // anon-callable email-enumeration surface and is dropped (patch 000008).
     const email = login.value.email.trim()
     if (!email) { showToast('Invalid email or password.', 'error'); return }

@@ -160,7 +160,7 @@ export function useSubmitReport({ form, photos, user, userProfile, showToast, lo
 
   // ---- photos ----
   // Upload staged photos under {pin}/{report}/{photo}.{ext} and return public URLs.
-  // The pin/report ids are minted before upload so keys mirror ownership (plan #93).
+  // The pin/report ids are minted before upload so keys mirror ownership.
   async function uploadStagedPhotos({ signal, pinId, reportId } = {}) {
     const items = photos.stagedPhotos.value.slice(0, photos.MAX_PHOTOS)
     if (!items.length) return []

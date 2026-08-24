@@ -388,7 +388,7 @@ input[type="text"], textarea{
 textarea{ resize:vertical; line-height:1.25; height: calc(1em * 1.25 * 3); }
 input:focus, textarea:focus{ border-color:#1e90ff; box-shadow:0 0 0 3px rgba(30,144,255,.15); }
 
-/* Chip rail (#50): one row, side-scrolling — chips never wrap into extra rows */
+/* Chip rail: one row, side-scrolling — chips never wrap into extra rows */
 .seg{
   display:flex; flex-wrap:nowrap; gap:6px;
   overflow-x:auto; scroll-snap-type:x proximity;

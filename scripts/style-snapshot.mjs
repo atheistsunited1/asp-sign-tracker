@@ -1,4 +1,4 @@
-// Computed-style snapshot for behaviour-neutral CSS moves (#133, #131).
+// Computed-style snapshot for behaviour-neutral CSS moves.
 // Build, serve the preview, open `/`, optionally click things to open panels, then dump every element under the
 // selected roots as { path, tag, classes, rect, styles } — and compare two dumps.
 //

@@ -56,7 +56,7 @@ export function useAutosuggest(
 
   function open() {
     if (chosen.value !== null && modelRef.value === chosen.value) return
-    // Suggestions only once the user has typed something (#66): no prompts on focus.
+    // Suggestions only once the user has typed something: no prompts on focus.
     if (!q.value) { openList.value = false; return }
     openList.value = true
     selIndex.value = -1

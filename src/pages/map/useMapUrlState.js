@@ -1,5 +1,5 @@
 // URL ↔ map state: ll/z/fid, filter/search query params, passive updates.
-// Extracted verbatim from MapPage.vue (issue #97 step 2). Shared map state is on
+// Extracted verbatim from MapPage.vue. Shared map state is on
 // `ctx` (see mapContext.js): other composables' members are referenced as
 // `ctx.<name>`; mutable shared lets live on `ctx.state`.
 import { watch } from 'vue'

@@ -81,7 +81,7 @@
 
 <script setup>
 // Left dock: handle + Jump-to box (suggestions), Search/Filter button and the Clear pill.
-// Reads the map page context (mapContext.js); extracted from MapPage.vue in #131 with its CSS.
+// Reads the map page context (mapContext.js); extracted from MapPage.vue with its CSS.
 import { inject } from 'vue'
 import { MAP_CTX } from '@/pages/map/mapContext'
 const ctx = inject(MAP_CTX)

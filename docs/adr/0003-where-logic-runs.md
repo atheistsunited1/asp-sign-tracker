@@ -1,7 +1,7 @@
 # ADR-0003: Where logic runs — the frontend / backend contract
 
 - Status: accepted (2026-08-22)
-- Related: ADR-0001 (RLS is the sole security boundary), ADR-0004 (codebase shape), issue #97
+- Related: ADR-0001 (RLS is the sole security boundary), ADR-0004 (codebase shape)
 
 ## Context
 

@@ -1,5 +1,5 @@
 // Leaflet map lifecycle: creation, base layers, zoom/move wiring, mount/unmount orchestration.
-// Extracted verbatim from MapPage.vue (issue #97 step 2). Shared map state is on
+// Extracted verbatim from MapPage.vue. Shared map state is on
 // `ctx` (see mapContext.js): other composables' members are referenced as
 // `ctx.<name>`; mutable shared lets live on `ctx.state`.
 import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
@@ -68,7 +68,7 @@ export function useLeafletMap(ctx) {
     try { await withTimeout(warmSupabaseConnection(), 6000, 'warm:supabase') } catch {}
   }
 
-  // Debug-only zoom readout (#68): shown when diagnostics logging is on.
+  // Debug-only zoom readout: shown when diagnostics logging is on.
   const showZoomReadout = ref(isDebugEnabled())
   if (typeof window !== 'undefined') {
     window.addEventListener(DEBUG_RUNTIME_EVENT, () => { showZoomReadout.value = isDebugEnabled() })
@@ -111,7 +111,7 @@ export function useLeafletMap(ctx) {
     }),
     // USGS "Imagery Only" (The National Map): public-domain orthoimagery, no key
     // or account. The cache stops at zoom 16; beyond that Leaflet upsamples
-    // (deliberately accepted — see issue #67).
+    // (deliberately accepted).
     Satellite: L.tileLayer('https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}', {
       maxNativeZoom: 16,
       maxZoom: 20,
@@ -219,7 +219,7 @@ export function useLeafletMap(ctx) {
           maxBoundsViscosity: 1.0,   // 1.0 = "sticky" edge; prevents dragging past bounds
           worldCopyJump: false,      // keep a single world; avoids weird wrap jumps
           inertia: true,             // can keep this; viscosity will still cap
-          // One-finger zoom: double-tap, hold, drag (down = in, up = out) — Google Maps gesture (#68)
+          // One-finger zoom: double-tap, hold, drag (down = in, up = out) — Google Maps gesture
           doubleTapDragZoom: 'center',
           doubleTapDragZoomOptions: { reverse: true },
       }).setView(centerCoords, 5)
@@ -237,7 +237,7 @@ export function useLeafletMap(ctx) {
 
       // My-location panes + renderer are owned by utils/mapLocationLayer.js.
       S.locationLayer = createLocationLayer(S.map)
-      S.map.on('dragstart', ctx.onUserPanStart)   // user pans while following → passive (#68)
+      S.map.on('dragstart', ctx.onUserPanStart)   // user pans while following → passive
       // Capture the exact point the user touched/clicked (pre-zoom/pan)
       S.map.on('mousedown touchstart', (e) => { S._lastPointerDownLL = e.latlng })
     }

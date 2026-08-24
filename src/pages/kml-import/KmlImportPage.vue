@@ -127,7 +127,7 @@
         </div>
       </div>
 
-      <!-- Help drawer: user-initiated, dismissible; essentials first, reference collapsed (#73) -->
+      <!-- Help drawer: user-initiated, dismissible; essentials first, reference collapsed -->
       <div v-if="helpOpen" class="help-scrim" @click="toggleHelp" aria-hidden="true"></div>
       <aside
         v-show="helpOpen"

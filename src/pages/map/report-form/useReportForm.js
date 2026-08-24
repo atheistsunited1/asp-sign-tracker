@@ -18,7 +18,7 @@ import { useCoordLocale } from '@/shared/domain/useCoordLocale'
 export function useReportForm({ user, supabasePins, showToast, confirm, log, photos, onForgetTransient }) {
   // ---- fields ----
   const visible = ref(false)
-  const updateNote = ref('')   // quick-update note, appended to the pin description (#66)
+  const updateNote = ref('')   // quick-update note, appended to the pin description
   const reportType = ref('')
   const signText = ref('')
   const signType = ref('')

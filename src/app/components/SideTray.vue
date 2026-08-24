@@ -11,13 +11,13 @@
 </template>
 
 <script setup>
-// Right-side tray shell used by the Account and Settings trays (#133).
+// Right-side tray shell used by the Account and Settings trays.
 defineProps({ open: { type: Boolean, default: false }, title: { type: String, default: '' } })
 defineEmits(['close'])
 </script>
 
 <style>
-/* Moved from App.vue (#133). Global, not scoped — these selectors are also matched by other pages
+/* Moved from App.vue. Global, not scoped — these selectors are also matched by other pages
    (e.g. .tray-x / .tray-section in the map tray), so scoping would change them. */
 /* Right-side trays (account / settings) */
 .side-tray {

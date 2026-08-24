@@ -35,12 +35,15 @@ last patch: baseline_20260824_production_baseline_01
 
 ## Versioned patch contract
 
-Patch filenames are ordered by explicit database version, then UTC creation
-time:
+Patch filenames carry the creation date, a short description, and the target
+database version:
 
 ```text
-NNNNNN_YYYYMMDDHHMMSS_short_description.sql
+<YYYYMMDD>-patch-<short-description>-<#>.sql     e.g. 20260901-patch-add-flag-column-1.sql
 ```
+
+`<#>` is the target database version. The ledger row — not the directory
+listing — is the authority on ordering: apply patches in ascending `<#>`.
 
 Every patch must be idempotent, self-document its purpose, and run in one
 transaction. It must:
@@ -57,9 +60,9 @@ transaction. It must:
    change before `commit`.
 
 `public.database_patch_version` and its version-`0` row are part of the
-canonical baseline. Because the ledger cannot precede the first patch, patch
-`000001` of a cycle is the sanctioned bootstrap: it creates the ledger table and
-version-`0` row when they are missing. Every later patch must abort if the table
+canonical baseline. Because the ledger cannot precede the first patch, the
+version-`1` patch of a cycle is the sanctioned bootstrap: it creates the ledger
+table and version-`0` row when they are missing. Every later patch must abort if the table
 or row is missing; no patch may reset or repair an existing ledger.
 
 The version table is database-control metadata. Client access is revoked, RLS
@@ -97,7 +100,7 @@ only for a planned major database version or reconciliation:
 5. Set the same new baseline ID and version `0` in the live database through a
    separately reviewed reconciliation operation.
 6. Remove the superseded patch cycle from the current tree and start again at
-   patch version `000001`. Git history retains the prior cycle.
+   patch version `1`. Git history retains prior cycles.
 
 PowerShell export command:
 

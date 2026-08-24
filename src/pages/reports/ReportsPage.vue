@@ -138,7 +138,7 @@ const feed = useReportsFeed({
   onSelected: (r) => {
     actions.primeLatestFinal(r)
     detail.loadEditingFrom(r)
-    locale.resetCoordLocale()            // reverse geocoding is deferred until the coordinates change (#74)
+    locale.resetCoordLocale()            // reverse geocoding is deferred until the coordinates change
     photos.reloadSubmissionPhotos(r.id)
     minimap.showPin(detail.editing.lat, detail.editing.lng, { draggable: true })
   },
@@ -223,7 +223,7 @@ h1 { margin: 0 0 12px; color: #ffd700; font-size: 16px; }
 .pin-popup .pp-coord { font-weight: 700; font-size: 12px; padding: 2px 6px; background: #222; border: 1px solid #444; border-radius: 6px; }
 .pin-popup .use-coord-btn { border: 1px solid #1e90ff; background: #1e90ff; color: #fff; border-radius: 8px; padding: 6px 8px; font-size: 12px; cursor: pointer; }
 
-/* Mobile: collapsible list pane over the detail pane, fixed map strip (#74) */
+/* Mobile: collapsible list pane over the detail pane, fixed map strip */
 @media (max-width: 800px) {
   h1 { display: none; }
   .title-row { display: none; }

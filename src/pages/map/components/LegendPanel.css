@@ -2,7 +2,7 @@
 /* Base positioning */
 #counts-legend{
   position:absolute;
-  top:47px;                  /* basemap control (10px + 31px) + 6px gap (#67) */
+  top:47px;                  /* basemap control (10px + 31px) + 6px gap */
   right:10px;
   left:auto;                 /* ensure no stray left makes it full-width */
   z-index:1600;
@@ -36,7 +36,7 @@
   align-items:center;
   justify-content:space-between;
 
-  /* Same token set as the basemap control (#67): no bold, no inset shadow, 6px radius */
+  /* Same token set as the basemap control: no bold, no inset shadow, 6px radius */
   background:#333;
   color:#fff;
   border:1px solid #444;

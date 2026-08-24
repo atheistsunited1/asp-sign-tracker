@@ -295,7 +295,7 @@ const { onCoordInput, resetCoords, gmapsLink } = ctx.minimap
 .ghost:focus-visible, .approve:focus-visible, .danger:focus-visible, .mini:focus-visible, .seg-item span:focus-visible, input:focus-visible, select:focus-visible, a.inline-map-btn:focus-visible {
   outline: 2px solid #ffd54f; outline-offset: 2px; box-shadow: 0 0 0 3px rgba(255, 213, 79, .25);
 }
-/* Mobile: sticky bottom action bar (#74) */
+/* Mobile: sticky bottom action bar */
 @media (max-width: 800px) {
   .info-card { flex: 1 1 auto; min-height: 0; padding: 10px; grid-template-rows: auto minmax(0, 1fr) auto; }
   .info-card .action-bar { order: 3; position: sticky; bottom: 0; margin: 0 -10px -10px; padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid #3a3a3a; background: #2a2a2a; box-shadow: 0 -4px 10px rgba(0,0,0,.25); }

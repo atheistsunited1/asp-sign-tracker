@@ -1,6 +1,6 @@
 // Pure rules of an activity submission (report form + bulk photos): which
 // visuals a new/merged pin gets, the row payloads, and the dated quick-update
-// note (#66). No I/O — see activitySubmissionService.js for the workflow.
+// note. No I/O — see activitySubmissionService.js for the workflow.
 import { defaultColorForPin, iconTypeForReportType } from '@/shared/domain/pinVisuals'
 
 /** A pin is "pending" when it is not approved yet (nearby candidates may also carry kind: 'pending'). */

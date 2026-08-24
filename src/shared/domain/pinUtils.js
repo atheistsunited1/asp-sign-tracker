@@ -77,7 +77,7 @@ export async function findNearbyPins(lat, lng, pins = [], radius = 20) {
       sign_text: pin.sign_text || '',
       sign_type: pin.sign_type || '',
       photos,
-      // Last activity = latest non-deleted report; falls back to the pin itself (#55).
+      // Last activity = latest non-deleted report; falls back to the pin itself.
       last_activity_at: latest.occurred_on || latest.created_at || pin.created_at || null,
       last_activity_type: latest.report_type || null,
       // 'plundered' | 'krakened' when the pin's lifecycle is closed, else null.
@@ -101,7 +101,7 @@ export function lastActivityMs(pin) {
 }
 
 /**
- * Newest-first by last activity (#55). Ties (and pins with no date) fall back
+ * Newest-first by last activity. Ties (and pins with no date) fall back
  * to distance when `__distanceMeters` is present, keeping the previous order
  * stable. Pure; returns a new array.
  */

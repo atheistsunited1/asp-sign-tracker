@@ -1,5 +1,5 @@
 /* Styles for MapPage.vue (scoped via <style scoped src>): map frame, banners, controls, basemap, tray backdrop,
-   popup (:deep) and location-dot rules. Dock / legend / tray styles live beside their components (#131). */
+   popup (:deep) and location-dot rules. Dock / legend / tray styles live beside their components. */
 #map-container {
   position: relative;
   /* fill the screen below the fixed top bar */
@@ -127,7 +127,7 @@
   box-shadow: 0 0 0 3px rgba(11,94,215,.25);
 }
 
-/* Locate control states (#68): crosshair glyph, color/animation carries the state */
+/* Locate control states: crosshair glyph, color/animation carries the state */
 #map-controls .locate-btn { color: #374151; }
 
 #map-controls .locate-icon { display:block; }
@@ -167,7 +167,7 @@
   margin: 0 !important;    /* reset conflicting margins */
 }
 
-/* Touch devices: pinch + one-finger zoom are the controls; ± stays for mouse/keyboard users (#68) */
+/* Touch devices: pinch + one-finger zoom are the controls; ± stays for mouse/keyboard users */
 @media (pointer: coarse) {
   :deep(.leaflet-control-zoom) { display: none !important; }
 }

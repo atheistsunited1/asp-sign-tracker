@@ -4,7 +4,7 @@
 // mutable values (the Leaflet map instance, in-flight controllers, counters)
 // that more than one composable assigns.
 // Injection key: MapPage provides the finished context so its template
-// components (GoToDock, LegendPanel, SearchTray) can read it (#131).
+// components (GoToDock, LegendPanel, SearchTray) can read it.
 export const MAP_CTX = Symbol('map-ctx')
 
 export function createMapContext(page) {

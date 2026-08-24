@@ -1,4 +1,4 @@
-// Tap-ambiguity gate for map pin taps (issue #18).
+// Tap-ambiguity gate for map pin taps.
 //
 // A tap is "ambiguous" when two or more pins sit within TAP_AMBIGUITY_RADIUS_M
 // of the tapped location — geographic distance, not screen pixels, so the

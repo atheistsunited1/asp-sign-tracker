@@ -128,7 +128,7 @@ hosted-project settings that make it hold.
 
 Streets = OpenStreetMap standard tiles (keep traffic modest per OSM policy). Satellite = USGS
 "Imagery Only" (public domain, US-only, native zoom ends at 16 — deliberately upsampled). Google/Esri
-tile endpoints are deliberately not used (licensing) — decision record in issue #67.
+tile endpoints are deliberately not used (licensing).
 
 ## Contributing, security, license
 

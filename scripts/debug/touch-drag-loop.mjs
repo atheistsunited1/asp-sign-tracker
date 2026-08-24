@@ -1,4 +1,4 @@
-// Touch-dynamics debug harness (issue #19: mobile ghost-pin drag).
+// Touch-dynamics debug harness (mobile ghost-pin drag).
 //
 // Drives the locally installed Chrome via playwright-core with mobile
 // emulation and raw CDP Input.dispatchTouchEvent — trusted touch that runs

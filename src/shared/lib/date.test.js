@@ -9,7 +9,7 @@ describe('date helpers', () => {
     expect(formatDateTime(d)).toMatch(/3:05|15:05/)
     expect(formatMonthYear(d)).toMatch(/Aug 2026/)
   })
-  it('treats date-only strings as local calendar dates, not UTC midnight (#126)', () => {
+  it('treats date-only strings as local calendar dates, not UTC midnight', () => {
     // In any zone west of UTC, new Date('2026-08-22') is the evening of Aug 21 — the bug this guards against.
     expect(formatDateOnly('2026-08-22')).toMatch(/Aug 22, 2026/)
     expect(formatMonthYear('2026-03-01')).toMatch(/Mar 2026/)
