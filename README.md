@@ -132,6 +132,22 @@ tile endpoints are deliberately not used (licensing) — decision record in issu
 
 ## Contributing, security, license
 
-- [`CONTRIBUTING.md`](CONTRIBUTING.md) — setup, checks, branch/PR flow, database-change rules, contributing anonymously.
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) — setup, checks, branch/PR flow, database-change rules.
 - [`SECURITY.md`](SECURITY.md) — how to report vulnerabilities (privately), and the security model.
 - **License:** MIT — see [`LICENSE`](LICENSE). Copyright (c) 2026 Atheists United.
+
+### Contributing anonymously
+
+You are welcome to contribute without linking your real identity: fork this repo and open a pull
+request from a separate GitHub account created for the purpose.
+
+- Create the account with no personal details, and in its Settings → Emails enable
+  **Keep my email addresses private** and **Block command line pushes that expose my email**.
+- Commit with that account's noreply address (`ID+username@users.noreply.github.com` — shown on the
+  same settings page), e.g.:
+  ```bash
+  git config user.name "your-alias"
+  git config user.email "ID+your-alias@users.noreply.github.com"
+  ```
+- Your fork, commits and pull request then carry only that persona. Avoid starring, watching or
+  commenting from an account you don't want associated.
