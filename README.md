@@ -132,6 +132,6 @@ tile endpoints are deliberately not used (licensing) — decision record in issu
 
 ## Contributing, security, license
 
-- [`CONTRIBUTING.md`](CONTRIBUTING.md) — setup, checks, branch/PR flow, database-change rules.
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) — setup, checks, branch/PR flow, database-change rules, contributing anonymously.
 - [`SECURITY.md`](SECURITY.md) — how to report vulnerabilities (privately), and the security model.
 - **License:** MIT — see [`LICENSE`](LICENSE). Copyright (c) 2026 Atheists United.
