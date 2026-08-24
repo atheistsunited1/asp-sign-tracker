@@ -21,8 +21,6 @@ sole canonical schema snapshot
   is always snapshot + every applied patch; the singleton row in
   `public.database_patch_version` says which patch is applied.
 - `db-patches/*.sql` is the immutable post-baseline ledger.
-- `archived-non-patch-sql-operations/` contains non-runnable SQL retained only
-  for historical context.
 
 The current canonical baseline is version `0`:
 
@@ -109,7 +107,3 @@ $timestamp = Get-Date -Format "yyyy-MM-dd-HH-mm-ss"
 $exportPath = Join-Path $env:TEMP "$timestamp-database.sql"
 npx supabase@latest db dump --linked --file $exportPath
 ```
-
-Schema exports cannot prove whether archived data-only operations ran. Do not
-convert archived non-patch SQL into a current patch without a new, separately
-reviewed requirement.
