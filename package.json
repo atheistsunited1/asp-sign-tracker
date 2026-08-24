@@ -1,0 +1,41 @@
+{
+  "name": "asp-sign-tracker",
+  "private": true,
+  "license": "MIT",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint . && node scripts/check-sizes.mjs",
+    "build": "npm run lint && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.53.0",
+    "browser-image-compression": "^2.0.2",
+    "echarts": "^6.1.0",
+    "exifr": "^7.1.3",
+    "leaflet": "^1.9.4",
+    "leaflet-doubletapdrag": "^0.1.2",
+    "leaflet-doubletapdragzoom": "^0.3.2",
+    "papaparse": "^5.5.3",
+    "vue": "^3.5.17",
+    "vue-echarts": "^8.1.0",
+    "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@vitejs/plugin-vue": "^6.0.0",
+    "eslint": "^10.9.0",
+    "eslint-plugin-vue": "^10.10.0",
+    "globals": "^17.11.0",
+    "playwright-core": "^1.62.1",
+    "vite": "^7.0.4",
+    "vitest": "^4.1.10"
+  },
+  "engines": {
+    "node": ">=22.12"
+  }
+}

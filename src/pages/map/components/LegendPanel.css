@@ -1,0 +1,224 @@
+/* Styles for LegendPanel.vue (scoped via <style scoped src>). Moved verbatim from MapPage.css in #131. */
+/* Base positioning */
+#counts-legend{
+  position:absolute;
+  top:47px;                  /* basemap control (10px + 31px) + 6px gap (#67) */
+  right:10px;
+  left:auto;                 /* ensure no stray left makes it full-width */
+  z-index:1600;
+  box-sizing:border-box;
+}
+/* Expanded shell (only when NOT collapsed) */
+#counts-legend:not(.collapsed){
+  width:320px;
+  max-width:calc(100vw - 20px);
+
+  background:#1f1f1f;
+  border:1px solid #333;
+  border-radius:12px;
+  box-shadow:0 6px 16px rgba(0,0,0,.35);
+  color:#e5e7eb;
+  padding:10px;
+}
+/* Collapsed: hide the shell completely; show only the button */
+#counts-legend.collapsed{
+  background:transparent;
+  border:0;
+  box-shadow:none;
+  padding:0;
+  width:auto;                /* let the button size itself */
+  color:inherit;
+}
+/* Header button (matches layer buttons) */
+#counts-legend .legend-title{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  /* Same token set as the basemap control (#67): no bold, no inset shadow, 6px radius */
+  background:#333;
+  color:#fff;
+  border:1px solid #444;
+  border-radius:6px;
+  padding:6px 10px;
+  font-weight:400;
+  font-size:14px;
+  line-height:1.2;
+  cursor:pointer;
+  text-align:left;
+  box-sizing:border-box;
+}
+#counts-legend .legend-title:hover{ background:#3b3b3b; }
+#counts-legend .legend-title .chev{ opacity:.9; }
+/* Collapsed: same footprint as the basemap control */
+#counts-legend.collapsed .legend-title{
+  width:100px;
+  margin:0;
+}
+/* Light inner body that holds the table */
+#counts-legend .legend-bodycard{
+  margin-top:8px;
+  background:#f3f4f6;
+  border:1px solid #d1d5db;
+  border-radius:10px;
+  padding:6px;
+  color:#1f2937;
+  overflow:hidden;
+}
+/* Never render the body when collapsed */
+#counts-legend.collapsed .legend-bodycard{ display:none !important; }
+/* Table layout */
+#counts-legend table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:12px;
+  table-layout:auto;
+}
+#counts-legend th,
+#counts-legend td{
+  padding:6px 8px;
+  border-top:1px solid #e5e7eb;
+  text-align:left;
+  vertical-align:middle;
+}
+#counts-legend thead th{
+  border-top:none;
+  color:#374151;
+  font-weight:600;
+}
+/* Dot column + dots */
+#counts-legend .dot-col{
+  width:14px;
+  padding-left:6px;
+  padding-right:0;
+}
+#counts-legend .legend-dot{
+  display:inline-block;
+  width:10px; height:10px;
+  border-radius:999px;
+  border:2px solid currentColor;    /* inner stroke from inline style */
+  box-shadow:0 0 0 1px #000;        /* thin black ring for light bg */
+  vertical-align:-2px;
+}
+/* Type column — allow wrapping (use your 56% <col> width in markup) */
+#counts-legend .type-col{
+  white-space:normal;
+  overflow:visible;
+  text-overflow:clip;
+  word-break:normal;
+  line-height:1.25;
+}
+/* Right-align numeric cells with tabular figures */
+#counts-legend td:nth-child(3),
+#counts-legend td:nth-child(4){
+  text-align:right;
+  font-variant-numeric:tabular-nums;
+}
+/* Interactive rows */
+#counts-legend .legend-row { cursor: pointer; }
+#counts-legend .legend-row:hover { background: #eef2f6; }
+/* Disabled (category OFF) — darker text + desaturated dot */
+#counts-legend .legend-row.off { color: #6b7280; }
+#counts-legend .legend-row.off .legend-dot {
+  filter: grayscale(1) brightness(0.9);
+  opacity: .65;
+  box-shadow: 0 0 0 1px #111; /* keep thin ring visible */
+}
+/* Footer with pending toggle */
+#counts-legend .legend-footer{
+  margin-top: 6px;
+  padding: 6px 6px 2px;
+  border-top: 1px solid #e5e7eb;
+}
+#counts-legend .legend-pending{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #1f2937;
+}
+#counts-legend .legend-pending input{
+  width: 14px;
+  height: 14px;
+}
+/* === Legend footer toggle switches === */
+.legend-toggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 16px; /* row, column */
+  align-items: center;
+}
+/* Hide the real checkbox; the label renders the switch */
+.legend-toggle {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+/* Label renders: [switch]  Label text */
+.legend-toggles > label {
+  --track-off: #d1d5db;     /* light gray (matches legend card) */
+  --track-on:  #1e90ff;     /* your active blue */
+  --knob:      #ffffff;
+  --border:    #cfd6de;
+  --text:      #1f2937;
+
+  position: relative;
+  display: inline-block;
+  padding-left: 58px;       /* space for the switch */
+  line-height: 26px;
+  min-height: 26px;
+  cursor: pointer;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+  user-select: none;
+}
+/* Switch track */
+.legend-toggles > label::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 50px;
+  height: 26px;
+  margin-top: -13px;
+  border-radius: 999px;
+  background: var(--track-off);
+  border: 1px solid var(--border);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.08);
+  transition: background-color .18s ease, border-color .18s ease;
+}
+/* Switch knob */
+.legend-toggles > label::after {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 50%;
+  width: 20px;
+  height: 20px;
+  margin-top: -10px;
+  border-radius: 50%;
+  background: var(--knob);
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 1px rgba(0,0,0,.12);
+  transform: translateX(0);
+  transition: transform .18s ease;
+}
+/* Checked state (via adjacent input) */
+.legend-toggle:checked + label::before {
+  background: var(--track-on);
+  border-color: var(--track-on);
+}
+.legend-toggle:checked + label::after {
+  transform: translateX(24px); /* 50 - knob(20) - 2*left(3) = 24 */
+}
+/* Focus ring for accessibility (tabbing) */
+.legend-toggle:focus-visible + label::before {
+  outline: 2px solid rgba(30,144,255,.35);
+  outline-offset: 2px;
+}
+/* Hover nudge (optional) */
+.legend-toggles > label:hover::before {
+  filter: brightness(0.98);
+}

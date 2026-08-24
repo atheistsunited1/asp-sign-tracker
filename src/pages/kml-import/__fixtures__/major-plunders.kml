@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Major Plunders - JICR Pre-2026</name>
+    <description/>
+    <Style id="icon-1881-0F9D58-normal"><IconStyle><color>ff589d0f</color><scale>1</scale><Icon><href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href></Icon></IconStyle></Style>
+    <Placemark>
+      <name>GA - Jesus Is Coming... (Buford)</name>
+      <description><![CDATA["Reported 12/21/25 by ASP (XX).<br>Yellow sign zip-tied to a traffic signpost in the median of Woodward Crossing Blvd. Not visible on the Dec 2023 GSV image.<br>Updated 12/29/25: Plundered by ASP (YY)! Huzzah!"]]></description>
+      <styleUrl>#icon-1881-0F9D58-normal</styleUrl>
+      <ExtendedData>
+        <Data name="gx_media_links">
+          <value>https://lh3.example.test/photo-c</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -84.0001,34.0001,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>GA - Jesus Is Coming... sticker (Norcross)</name>
+      <description><![CDATA["Reported 01/17/26 and plundered by ASP (ZZ)! Huzzah!<br>Recidivist locale; last plundered 01/06/26.<br>Yellow barnacle on a large metal sign pole along I-85S just south of Exit 41. Not visible on the Dec 2025 GSV image."]]></description>
+      <styleUrl>#icon-1881-0F9D58-normal</styleUrl>
+      <Point>
+        <coordinates>
+          -84.0002,34.0002,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>GA - Jesus Saves (Lula)</name>
+      <description><![CDATA["Reported 07/06/25 by ASP (XX).<br>Yellow sign with black letters on a utility pole on the east side of Tribble Gap Rd. Visible on the Jun 2024 GSV image but not Jan 2023."]]></description>
+      <styleUrl>#icon-1881-0F9D58-normal</styleUrl>
+      <Point>
+        <coordinates>
+          -83.0003,34.0003,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>GA - Jesus Is Coming... (Buford)</name>
+      <description><![CDATA["Reported 12/21/25 by ASP (XX).<br>Yellow sign zip-tied to a traffic signpost in the median of Woodward Crossing Blvd. Not visible on the Dec 2023 GSV image.<br>Updated 12/29/25: Plundered by ASP (YY)! Huzzah!"]]></description>
+      <styleUrl>#icon-1881-0F9D58-normal</styleUrl>
+      <Point>
+        <coordinates>
+          -84.0001,34.0001,0
+        </coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+</kml>

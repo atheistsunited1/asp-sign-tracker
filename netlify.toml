@@ -1,0 +1,27 @@
+# Netlify build configuration.
+# Production deploys build from the `main` branch (set as the production
+# branch when the site is connected in the Netlify UI).
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Vite 7 requires Node >= 22.12
+  NODE_VERSION = "22"
+  
+  # These are public by design: a Vite client app bakes them into the JS
+  # bundle, and the anon key is safe to expose because Postgres RLS is the
+  # security boundary (see docs/adr/0001-rls-sole-security-boundary.md).
+  # Without this, Netlify's secrets scanner fails the build on finding their
+  # values in dist/.
+  # VITE_APP_BASE_URL (optional) overrides the public app base URL used for
+  # share links; defaults to the page origin at runtime when unset.
+  SECRETS_SCAN_OMIT_KEYS = "VITE_SUPABASE_URL,VITE_SUPABASE_ANON_KEY,VITE_APP_BASE_URL"
+
+# Single-page app: vue-router uses history mode, so every route must serve
+# index.html and let the client router resolve it.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

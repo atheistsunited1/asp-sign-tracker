@@ -1,0 +1,4 @@
+# Normalize line endings for files git detects as text.
+# Existing files are left as committed (no renormalization); this only
+# prevents new CRLF/LF churn from mixed-platform checkouts going forward.
+* text=auto

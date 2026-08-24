@@ -1,0 +1,137 @@
+/* Styles for GoToDock.vue (scoped via <style scoped src>). Moved verbatim from MapPage.css in #131. */
+/* Left edge dock: groups the Jump-to bar, Search/Filter button and Clear pill.
+   The handle tab sits on the viewport edge; docking slides the group off-screen. */
+.left-dock {
+  position: absolute;
+  top: 10px;
+  left: 34px;                                 /* 10px gutter + 24px handle */
+  width: min(420px, calc(100% - 154px));      /* leave room for right-side layer controls */
+  z-index: 1700;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  pointer-events: none;                       /* empty dock area must not eat map gestures */
+  transition: transform .2s ease, opacity .2s ease;
+}
+.left-dock > * { pointer-events: auto; }
+.left-dock.docked {
+  transform: translateX(calc(-100% - 40px));
+  opacity: 0;
+}
+.left-dock.docked > * { pointer-events: none; }
+.left-dock-handle {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  z-index: 1710;
+  width: 24px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid #3a3a3a;
+  border-left: 0;
+  border-radius: 0 8px 8px 0;
+  background: #2f3a4a;
+  color: #fff;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,.3);
+}
+.goto-map-wrap {
+  position: relative;
+  transform: none;
+  width: 132px;                         /* collapsed */
+  max-width: 100%;
+  z-index: 1650;
+  display: grid;
+  gap: 4px;
+  transition: width .18s ease, box-shadow .18s ease;
+}
+.goto-map-wrap:focus-within {
+  width: 100%;                          /* expands on focus to the dock width */
+  z-index: 1750;
+}
+.goto-map-input-wrap {
+  position: relative;
+}
+.goto-map-input {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid #cfd6de;
+  background: rgba(255, 255, 255, 0.96);
+  color: #111827;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.22);
+  box-sizing: border-box;
+  font-size: 12px;
+}
+.goto-map-input::placeholder {
+  color: #4b5563;
+}
+.goto-map-suggest {
+  top: calc(100% + 6px);
+}
+@media (max-width: 640px) {
+  .left-dock {
+    width: min(340px, calc(100% - 144px));
+  }
+  .goto-map-wrap {
+    width: 116px;                          /* tighter collapsed width on small phones */
+  }
+}
+/* Mini expand button when tray is closed */
+.search-expand-btn {
+  /* positioned by .left-dock (flex column) */
+  border: 1px solid #3a3a3a;
+  background: #2f3a4a;
+  color: #fff;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,.3);
+}
+/* shared dropdown look */
+.suggest-list {
+  z-index: 5000;
+  position: absolute;
+  left: 0; right: 0;
+  max-height: 220px;
+  overflow: auto;
+  background: #ffffff;
+  border: 1px solid #c9c9c9;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.10);
+  padding: 4px;
+  margin: 0;
+  list-style: none;
+  color: #1f2937;
+}
+.suggest-list li {
+  padding: 10px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1.2;
+  color: #1f2937;
+  font-weight: 500;
+}
+.suggest-list li:hover,
+.suggest-list li.active {
+  background: #eaf3ff;
+  color: #0b57d0;
+}
+.suggest-list li + li { border-top: 1px solid #f2f2f2; }
+.search-clear-btn{
+  /* positioned by .left-dock (flex column) */
+  border: 1px solid #5b2a2a;
+  background: #3a1f1f;
+  color: #fff;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,.3);
+}
+.search-clear-btn:hover { background:#492424; }

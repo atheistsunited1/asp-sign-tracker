@@ -1,0 +1,367 @@
+/* Styles for SearchTray.vue (scoped via <style scoped src>). Moved verbatim from MapPage.css in #131. */
+/* 🧭 Left advanced tray */
+#search-tray {
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 10px;
+  width: 280px;
+  background: #1f1f1f;
+  color: #eee;
+  border: 1px solid #333;
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.35);
+  z-index: 1700;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  transform: translateX(-110%);
+  transition: transform .2s ease;
+  overflow: hidden;
+
+}
+.tray-head {
+  position: sticky;
+  top: 0;
+  z-index: 1710;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  background: #1f1f1f;
+  border-bottom: 1px solid #333;
+}
+.tray-head-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #f3f4f6;
+  letter-spacing: .02em;
+}
+/* Sticky folder-style tabs at the top */
+.tray-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 1710;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 8px 12px 0;
+  background: #1f1f1f;
+  border-bottom: 1px solid #333;
+}
+/* Close button lives in the tabs row */
+.tray-tabs .tray-close {
+  margin-left: auto;
+  border: none;
+  background: transparent;
+  color: #ddd;
+  font-size: 16px;
+  cursor: pointer;
+}
+/* Folder-style tabs */
+.tray-tabs .tab {
+  appearance: none;
+  border: 1px solid #3a3a3a;
+  border-bottom: none;              /* so active tab attaches to panel */
+  border-radius: 10px 10px 0 0;
+  background: #232323;
+  color: #cfd3da;
+  padding: 8px 12px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.tray-tabs .tab:hover { background: #2a2a2a; }
+/* 🔵 clear active state */
+.tray-tabs .tab.active {
+  background: #0b57d0;
+  color: #fff;
+  border-color: #0b57d0;
+  margin-bottom: -1px;              /* overlap panel’s top border */
+  box-shadow: 0 -1px 0 #0b57d0 inset;
+  font-weight: 600;
+}
+/* Panels area is the ONLY scroll container */
+.tray-panels {
+  min-height: 0;                    /* allow shrinking inside the grid */
+  overflow-y: auto;                 /* 👈 this fixes the long list scrolling */
+  padding-bottom: 8px;
+}
+/* Keep the sticky search box inside the scrolling panel */
+.tab-panel .tray-fixed {
+  background: #1f1f1f;
+  border-bottom: 1px solid #333;
+}
+#search-tray.open {
+  transform: translateX(0);
+}
+.tray-close {
+  border: none;
+  background: transparent;
+  color: #ddd;
+  font-size: 16px;
+  cursor: pointer;
+}
+.tray-scroll {
+  min-height: 0;      /* allow child to actually shrink inside the grid */
+  overflow: auto;     /* single scroll area for all sections */
+}
+.tray-section {
+  padding: 10px 12px;
+  overflow: visible;  /* sections themselves don't scroll */
+}
+.tray-title {
+  font-size: 12px;
+  color: #bbb;
+  margin: 6px 0 8px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.tray-field {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 10px;
+  font-size: 13px;
+  position: relative; 
+}
+.tray-field > input {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #3a3a3a;
+  background: #232323;
+  color: #eee;
+  box-sizing: border-box;
+}
+.tray-actions {
+  padding: 10px 12px;
+  border-top: 1px solid #333;
+  background: #262626;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.tray-head-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tray-clear {
+  border: 1px solid #3a3a3a;
+  background: #2f3a4a;
+  color: #fff;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+.tray-clear:hover { background: #36455a; }
+/* Fixed block above the scroll area */
+.tray-fixed {
+  position: relative; 
+  padding: 10px 12px;
+  background: #1f1f1f;
+  border-bottom: 1px solid #333;
+}
+.tray-search-input {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #3a3a3a;
+  background: #232323;
+  color: #eee;
+  box-sizing: border-box;
+}
+.pin-filter-grid {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2px;
+}
+.pin-filter-grid .tray-field {
+  margin-bottom: 6px;
+}
+.pin-filter-grid .tray-field > span {
+  font-size: 11px;
+  color: #9ca3af;
+  letter-spacing: 0.02em;
+}
+.search-actions {
+  margin-top: 8px;
+  display: flex;
+  justify-content: flex-end;
+}
+.search-meta {
+  margin-top: 6px;
+  font-size: 11px;
+  color: #6b7280;
+  line-height: 1.2;
+}
+.tray-actions .muted-help {
+  margin: 0;                 /* remove default <p> margin */
+  font-size: 12px;
+  line-height: 1.25;
+  color: #bbb;
+  opacity: .9;
+  letter-spacing: .01em;
+  white-space: normal;       /* allow wrapping on narrow screens */
+}
+.search-results {
+  margin-top: 6px;
+  max-height: 250px;
+  overflow: auto;
+  display: grid;
+  gap: 6px;
+  padding-right: 4px;
+}
+.search-result-card {
+  border: 1px solid #d8dee7;
+  border-radius: 7px;
+  padding: 6px 8px;
+  background: #fff;
+  cursor: pointer;
+}
+.search-result-card:hover {
+  border-color: #c9d6e9;
+  background: #f8fafc;
+}
+.search-result-card:focus-visible {
+  outline: 2px solid #2d7cf0;
+  outline-offset: 1px;
+}
+.search-result-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+.search-result-line {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  line-height: 1.2;
+}
+.search-result-id {
+  font-weight: 700;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 46%;
+  flex: 0 1 auto;
+}
+.search-result-loc {
+  color: #4b5563;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+.search-save-btn {
+  border: 1px solid #c7d2e1;
+  background: #f9fafb;
+  color: #4b5563;
+  border-radius: 6px;
+  width: 28px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  flex: 0 0 auto;
+}
+.search-save-btn.active {
+  background: #ecf5ff;
+  border-color: #93c5fd;
+  color: #1d4ed8;
+}
+.tray-tabs .tab {
+  appearance: none;
+  border: 1px solid #3a3a3a;
+  border-bottom: none;            /* so active tab looks attached to panel */
+  border-radius: 10px 10px 0 0;
+  background: #232323;
+  color: #ddd;
+  padding: 8px 12px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.tray-tabs .tab:hover { background: #2a2a2a; }
+.tray-tabs .tab.active {
+  background: #1f1f1f;           /* match tray body */
+  color: #fff;
+  border-color: #333;
+  margin-bottom: -1px;            /* overlap the panel’s top border */
+  box-shadow: 0 -1px 0 #1f1f1f inset; /* hide seam on high DPI */
+}
+/* Optional: small helper for panel wrapper (no special rules needed, but handy) */
+.tab-panel { display: block; border-top: 1px solid #333;  }
+.tray-tabs .tab:focus-visible { outline: 2px solid #4c9aff; outline-offset: -2px; }
+.tray-chips{ display:flex; gap:6px; padding:8px 12px; border-bottom:1px solid #333; }
+.chip{
+  display:inline-flex; align-items:center; gap:6px;
+  padding:4px 8px; border-radius:999px; font-size:12px; background:#2a2a2a;
+  border:1px solid #3a3a3a; color:#ddd;
+}
+.chip--clear{ background:#3a1f1f; border-color:#5b2a2a; color:#fff; }
+.pill-row{ display:flex; flex-wrap:wrap; gap:8px; }
+.seg-pill{
+  border:1px solid #3a3a3a; background:#232323; color:#eee; border-radius:999px; padding:8px 12px; font-size:12px;
+}
+.seg-pill.active{ background:#1e90ff; border-color:#1e90ff; color:#fff; }
+/* Stack pills vertically, but keep each at content width */
+.pill-row.pill-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start; /* 👈 prevents full-width stretch in column flex */
+}
+/* Keep the base pill look you already have */
+.seg-pill{
+  border:1px solid #3a3a3a;
+  background:#232323;
+  color:#eee;
+  border-radius:999px;
+  padding:8px 12px;
+  font-size:12px;
+}
+.seg-pill.active{ background:#1e90ff; border-color:#1e90ff; color:#fff; }
+/* 🔧 Remove these if they exist from earlier:
+.seg-pill.seg-pill--full { … }
+.seg-pill.seg-pill--full.active { … }
+.seg-pill.seg-pill--full:focus-visible { … }
+*/
+.toggle{ display:flex; align-items:center; gap:8px; font-size:14px; }
+.tray-clear.tiny {
+  margin-left: 8px;
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: 6px;
+}
+.ghost {
+  border: 1px solid #3a3a3a;
+  background: #232323;
+  color: #eee;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+.ghost:hover { background: #2a2a2a; }
+/* Lighter ghost buttons inside the Filter panel (more contrast vs. pills) */
+#panel-filter .row .ghost {
+  background: #2b2b2b;        /* lighter than #232323 */
+  border-color: #4a4a4a;      /* lighter border */
+  color: #eaecef;
+}
+#panel-filter .row .ghost:hover {
+  background: #323232;        /* slightly brighter on hover */
+  border-color: #5a5a5a;
+}
+#panel-filter .row .ghost:focus-visible {
+  outline: 2px solid #9aa4b2; /* clear keyboard focus */
+  outline-offset: 2px;
+}

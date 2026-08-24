@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Reported Signs</name>
+    <description/>
+    <Style id="icon-1670-0288D1-normal"><IconStyle><color>ffd18802</color><scale>1</scale><Icon><href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href></Icon></IconStyle></Style>
+    <Placemark>
+      <name>CA - Jesus Saves (Springfield)</name>
+      <description><![CDATA["Reported 03/02/25 by ASP (XX) via GSV dated Aug 2023.<br>Last checked 01/10/26; Nov 2025 GSV.<br>34.0001, -118.0001<br>Yellow sign nailed to a utility pole on the south side of Main St across from Oak Rd. Not visible on the Mar 2022 GSV image.<br>Updated 11/14/25: As of GSV dated Aug 2025, the snipe sign was still there."<br><img src="https://lh3.example.test/photo-a" height="200" width="auto" />]]></description>
+      <styleUrl>#icon-1670-0288D1-normal</styleUrl>
+      <ExtendedData>
+        <Data name="gx_media_links">
+          <value><![CDATA[https://lh3.example.test/photo-a https://lh3.example.test/photo-b]]></value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.0001,34.0001,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>NC - Jesus Is Coming... sticker (Riverton)</name>
+      <description>Reported 05/12/26 by ASP (YY).&lt;br&gt;Yellow barnacle on a metal signpost on the east side of Mill Rd north of Canton Hwy. Not visible on the Apr 2024 GSV image.&lt;br&gt;Reported to NC311 - case 311-00000001.</description>
+      <styleUrl>#icon-1670-0288D1-normal</styleUrl>
+      <ExtendedData>
+        <Data name="gx_media_links">
+          <value><![CDATA[https://lh3.example.test/photo-d]]></value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -80.0002,35.0002,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Prepare to Meet God</name>
+      <description><![CDATA[Large concrete sign placed some time ago on Airport Rd. No GSV coverage.]]></description>
+      <styleUrl>#icon-1670-0288D1-normal</styleUrl>
+      <Point>
+        <coordinates>
+          -83.0003,35.0003,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>TX - No coordinates here</name>
+      <description><![CDATA[Reported 01/01/26 by ASP (XX).]]></description>
+      <styleUrl>#icon-1670-0288D1-normal</styleUrl>
+    </Placemark>
+  </Document>
+</kml>

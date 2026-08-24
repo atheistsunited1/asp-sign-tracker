@@ -1,0 +1,5 @@
+# gitleaks false positives — reviewed 2026-08-24 (public-release checklist).
+# The two JWTs in the touch-drag smoke are Supabase's PUBLIC local-dev demo keys
+# (iss: supabase-demo, published in the Supabase CLI docs) — not credentials.
+scripts/debug/touch-drag-loop.mjs:jwt:21
+scripts/debug/touch-drag-loop.mjs:jwt:22
