@@ -98,7 +98,6 @@ import {
   signInWithOtp,
   signInWithPassword,
   signUp,
-  upsertPendingProfile,
 } from '@/shared/auth/authService'
 
 const { show: showToast } = useToast()
@@ -227,21 +226,9 @@ async function onSignup () {
       return
     }
 
-    // Insert/Upsert pending profile (single table)
-    const { error: insErr } = await upsertPendingProfile({
-      id: userId,
-      email: clean.email,
-      username: clean.username,
-      initials: clean.initials,
-      zip: clean.zip,
-      role: 'user',
-      is_approved: false,
-      approved_at: null,
-      approved_by: null,
-      updated_at: new Date().toISOString()
-    })
-    if (insErr) throw insErr
-
+    // The pending profiles row is created server-side by the on_auth_user_created
+    // trigger (DB patch 2) — signUp returns no session while the email is
+    // unconfirmed, so the client cannot write it.
     showToast('Account created. Check your email to verify. Access is pending admin approval.', 'success')
     mode.value = 'login'
   } catch (e) {
