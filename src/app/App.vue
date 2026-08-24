@@ -31,7 +31,7 @@
 
     </header>
     <div v-if="pendingSignup" class="status-banner" role="status" aria-live="polite">
-      Account pending approval. You can browse the map but need approval for Reports.
+      Account pending admin approval. You can browse the map and will be able to log in once approved.
     </div>
 
     <!-- Offline banner -->

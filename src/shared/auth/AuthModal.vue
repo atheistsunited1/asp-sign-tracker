@@ -92,11 +92,13 @@ import { useToast } from '@/shared/ui/useToast'
 import { validateUserPayload, validateUsername } from '@/shared/lib/validators'
 import { errorToUserMessage } from '@/shared/lib/errors'
 import {
+  fetchProfileAccessByUserId,
   isEmailInUse,
   isUsernameAvailable,
   resetPasswordForEmail,
   signInWithOtp,
   signInWithPassword,
+  signOut,
   signUp,
 } from '@/shared/auth/authService'
 
@@ -147,10 +149,18 @@ async function onLogin () {
     const email = login.value.email.trim()
     if (!email) { showToast('Invalid email or password.', 'error'); return }
 
-    const { error: signErr } = await signInWithPassword({
+    const { data: signData, error: signErr } = await signInWithPassword({
       email, password: login.value.password
     })
     if (signErr) throw signErr
+
+    // Approval gate: unapproved accounts cannot log in at all.
+    const { data: access } = await fetchProfileAccessByUserId(signData?.user?.id)
+    if (access && !access.is_approved) {
+      await signOut().catch(() => {})
+      showToast('Your account is pending admin approval. You can log in once an admin approves it.', 'info')
+      return
+    }
     emit('close')
   } catch (e) {
     showToast(errorToUserMessage(e, 'Login failed.'), 'error')

@@ -1,7 +1,7 @@
 import { computed, ref } from 'vue'
 import { normalizeRole, isModeratorRole } from '@/shared/auth/roles'
 import { profilesRepo } from '@/shared/data/repos/profilesRepo'
-import { getSession as getAuthSession, onAuthStateChange } from '@/shared/auth/authService'
+import { getSession as getAuthSession, onAuthStateChange, signOut } from '@/shared/auth/authService'
 
 const user = ref(null)
 const userRole = ref('guest')
@@ -66,14 +66,19 @@ async function loadProfile() {
   userProfile.value = { ...data, role }
 
   if (!data.is_approved) {
-    userRole.value = 'guest'
+    // Unapproved accounts cannot hold a session at all: end it immediately.
+    // The email is captured first (signOut's SIGNED_OUT handler clears state),
+    // and pendingSignup is set afterwards so the banner explains the sign-out.
+    const email = user.value?.email || null
+    await signOut().catch(() => {})
+    clearAuthState()
     pendingSignup.value = {
       username: data.username,
       initials: data.initials,
       zip: null,
-      email: user.value?.email || null,
+      email,
     }
-    return userProfile.value
+    return null
   }
 
   pendingSignup.value = null
