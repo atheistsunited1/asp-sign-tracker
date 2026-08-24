@@ -24,10 +24,7 @@ export const profilesRepo = {
   },
   selectByInitials(initials = []) {
     return table().select('id, initials').in('initials', initials)
-  },
-  upsert(rows) {
-    return table().upsert(rows)
-  },
+  },
   updateById(id, payload) {
     return table().update(payload).eq('id', id)
   },

@@ -93,6 +93,9 @@ only for a planned major database version or reconciliation:
    repository.
 2. Review it against the current snapshot plus every patch.
 3. Replace the sole file in `db-snapshot/` without hand-editing the export.
+   Note: schema exports do NOT include auth-schema objects (e.g. the
+   `on_auth_user_created` signup trigger) — after reconciliation, verify them
+   and re-apply their patches if missing.
 4. If sanitized reference data is required for the new cycle, cut it then
    (including the singleton version-`0` ledger row); none exists today.
 5. Set the same new baseline ID and version `0` in the live database through a

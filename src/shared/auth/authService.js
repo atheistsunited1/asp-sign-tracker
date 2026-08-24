@@ -58,10 +58,6 @@ export function isEmailInUse(email) {
   return profilesRepo.rpcEmailInUse(email)
 }
 
-export function upsertPendingProfile(profile) {
-  return profilesRepo.upsert([profile])
-}
-
 export async function fetchProfileAccessByUserId(userId) {
   const { data, error } = await profilesRepo.selectById(userId, 'role, is_approved')
   if (error) return { data: null, error }
