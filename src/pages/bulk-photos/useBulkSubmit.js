@@ -106,6 +106,7 @@ export function useBulkSubmit({ bulk, user, showToast, logClient }) {
         submitterName: await resolveSubmitterName({ user }),
         lat, lng,
         state: result.state || existingPin?.state || '',
+        country: result.country || '',
         photoUrls: it.photoPath ? [toPublicUrl(it.photoPath)] : [],
         source: 'BulkPhotoReports',
       })

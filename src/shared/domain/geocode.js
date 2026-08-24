@@ -60,7 +60,7 @@ export async function reverseGeocodePlace(lat, lng) {
   }
 }
 
-/** Reverse geocode to just { city, state } (2.5s timeout). */
+/** Reverse geocode to { city, state, country } (country = ISO2, e.g. US/CA/NZ; 2.5s timeout). */
 export async function reverseGeocodeCityState(lat, lng) {
   const url =
     `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}` +
@@ -74,9 +74,13 @@ export async function reverseGeocodeCityState(lat, lng) {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const j = await res.json();
     const a = j?.address ?? {};
-    return { city: pickLocality(a) || null, state: shortRegion(a) || null };
+    return {
+      city: pickLocality(a) || null,
+      state: shortRegion(a) || null,
+      country: a.country_code ? String(a.country_code).toUpperCase() : null,
+    };
   } catch {
     clearTimeout(to);
-    return { city: null, state: null };
+    return { city: null, state: null, country: null };
   }
 }
