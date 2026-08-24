@@ -138,13 +138,13 @@ tile endpoints are deliberately not used (licensing) — decision record in issu
 
 ### Contributing anonymously
 
-You are welcome to contribute without linking your real identity: fork this repo and open a pull
-request from a separate GitHub account created for the purpose.
+You are welcome to contribute without linking your real identity: 
 
-- Create the account with no personal details, and in its Settings → Emails enable
-  **Keep my email addresses private** and **Block command line pushes that expose my email**.
-- Commit with that account's noreply address (`ID+username@users.noreply.github.com` — shown on the
-  same settings page), e.g.:
+- Create a separate GitHub account with no personal details.
+- Update account Settings → Emails: enable **Keep my email addresses private** and **Block command line pushes that expose my email**.
+- Fork this repo and open a pull request from that account.
+
+- Commit with that account's noreply address (`ID+username@users.noreply.github.com` — shown on the same settings page), e.g.:
   ```bash
   git config user.name "your-alias"
   git config user.email "ID+your-alias@users.noreply.github.com"
