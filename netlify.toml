@@ -25,14 +25,3 @@
   from = "/*"
   to = "/index.html"
   status = 200
-
-# Security headers (Netlify security checklist). A strict Content-Security-Policy
-# is tracked as a follow-up issue (Leaflet tiles/inline styles need care).
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Content-Type-Options = "nosniff"
-    X-Frame-Options = "DENY"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
-    Permissions-Policy = "geolocation=(self), camera=(), microphone=(), payment=()"
