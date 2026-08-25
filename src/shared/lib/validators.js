@@ -1,7 +1,8 @@
 // Centralized, re-usable field validation
 
-// username: 3–24 chars, letters numbers _ and - only, must start with a letter/number
-const USERNAME_RX = /^[A-Za-z0-9][A-Za-z0-9_-]{2,23}$/;
+// username: 3–24 chars, letters numbers _ and . only (mirrors the DB check
+// profiles_username_chars_ck), must start with a letter/number
+const USERNAME_RX = /^[A-Za-z0-9][A-Za-z0-9_.]{2,23}$/;
 
 // initials: 1–6 visible, no whitespace; we’ll normalize to upcase trimmed
 const INITIALS_RX = /^[^\s]{1,6}$/;
@@ -15,7 +16,7 @@ const EMAIL_RX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export function validateUsername(u) {
   const v = (u || '').trim();
   return USERNAME_RX.test(v) ? { ok: true, value: v } :
-    { ok: false, msg: 'Username must be 3–24 characters (letters, numbers, _ or -).' };
+    { ok: false, msg: 'Username must be 3–24 characters (letters, numbers, _ or .).' };
 }
 
 export function validateEmail(e) {
