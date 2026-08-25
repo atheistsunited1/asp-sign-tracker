@@ -353,6 +353,12 @@ entrypoint = "./functions/notify_discord/index.ts"
 # For example, if you want to serve static HTML pages in your function:
 # static_files = [ "./functions/notify_discord/*.html" ]
 
+[functions.login_with_username]
+enabled = true
+# Pre-auth by definition (it IS the login); uniform errors, no email disclosure.
+verify_jwt = false
+entrypoint = "./functions/login_with_username/index.ts"
+
 [functions.purge_deleted]
 enabled = true
 verify_jwt = false

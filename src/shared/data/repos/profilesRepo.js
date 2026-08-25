@@ -19,6 +19,10 @@ export const profilesRepo = {
   rpcAdminListProfiles(pendingOnly = false) {
     return supabase.rpc('admin_list_profiles', { pending_only: pendingOnly })
   },
+  /** Deletes the profile AND the auth account (SECURITY DEFINER, admin-gated). */
+  rpcAdminDeleteUser(id) {
+    return supabase.rpc('admin_delete_user', { p_user_id: id })
+  },
   selectByInitials(initials = []) {
     return table().select('id, initials').in('initials', initials)
   },
