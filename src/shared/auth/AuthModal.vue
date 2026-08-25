@@ -245,6 +245,8 @@ async function onSignup () {
     if (e?.code === '23505' || (/duplicate key/i.test(raw) && /username/i.test(raw))) {
       availability.value = false
       showToast('That username is taken — please choose another.', 'error')
+    } else if (e?.code === '23514' || /check constraint/i.test(raw)) {
+      showToast('Username must be 3–24 characters (letters, numbers, _ or .).', 'error')
     } else {
       showToast(errorToUserMessage(e, raw || 'Sign up failed.'), 'error')
     }
