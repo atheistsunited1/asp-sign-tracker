@@ -91,6 +91,7 @@ import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { useToast } from '@/shared/ui/useToast'
 import { validateUserPayload, validateUsername } from '@/shared/lib/validators'
 import { errorToUserMessage } from '@/shared/lib/errors'
+import { logger } from '@/shared/lib/logger'
 import {
   fetchProfileAccessByUserId,
   isUsernameAvailable,
@@ -162,7 +163,10 @@ async function onLogin () {
     }
     emit('close')
   } catch (e) {
-    showToast(errorToUserMessage(e, 'Login failed.'), 'error')
+    logger.warn('login failed', e)
+    // Auth API messages are user-appropriate; fall back to them rather than
+    // masking every unrecognized error as a generic failure.
+    showToast(errorToUserMessage(e, e?.message || 'Login failed.'), 'error')
   } finally { busy.value = false }
 }
 
@@ -236,7 +240,8 @@ async function onSignup () {
     showToast('Account created. Check your email to verify. Access is pending admin approval.', 'success')
     mode.value = 'login'
   } catch (e) {
-    showToast(errorToUserMessage(e, 'Sign up failed.'), 'error')
+    logger.warn('signup failed', e)
+    showToast(errorToUserMessage(e, e?.message || 'Sign up failed.'), 'error')
   } finally { busy.value = false }
 }
 
