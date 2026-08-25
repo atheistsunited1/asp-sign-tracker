@@ -194,9 +194,9 @@ async function onSignup () {
   }
   const clean = v.value
 
-  if (availability.value === null) await checkAvailability()
-  if (availability.value === false) {
-    showToast('Username is taken.', 'error')
+  await checkAvailability()
+  if (availability.value !== true) {
+    if (availability.value === false) showToast('Username is taken.', 'error')
     return
   }
 
@@ -241,7 +241,13 @@ async function onSignup () {
     mode.value = 'login'
   } catch (e) {
     logger.warn('signup failed', e)
-    showToast(errorToUserMessage(e, e?.message || 'Sign up failed.'), 'error')
+    const raw = String(e?.message || '')
+    if (e?.code === '23505' || (/duplicate key/i.test(raw) && /username/i.test(raw))) {
+      availability.value = false
+      showToast('That username is taken — please choose another.', 'error')
+    } else {
+      showToast(errorToUserMessage(e, raw || 'Sign up failed.'), 'error')
+    }
   } finally { busy.value = false }
 }
 
