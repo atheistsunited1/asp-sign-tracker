@@ -22,7 +22,9 @@ export function updateUser({ id, payload }) {
 }
 
 export function deleteUserById(id) {
-  return profilesRepo.deleteById(id)
+  // Removes BOTH the profile and the auth account (admin_delete_user, patch 5)
+  // so a denied signup's email can register again later.
+  return profilesRepo.rpcAdminDeleteUser(id)
 }
 
 export function sendResetPasswordEmail(email, redirectTo) {
