@@ -82,8 +82,6 @@ Storage: `sign-photos` is a public-read bucket (object URLs work for everyone); 
 
 ## Deferred by decision
 
-- Account MFA/2FA on GitHub, Supabase, and Netlify — revisit around public launch.
-- Supabase leaked-password protection.
 - Discord bot rollout — in progress ([#6](https://github.com/atheistsunited1/asp-sign-tracker/issues/6)).
 - Full member/admin RLS matrix on a local seeded stack ([#11](https://github.com/atheistsunited1/asp-sign-tracker/issues/11)).
 - Custom domain + HSTS preload.
