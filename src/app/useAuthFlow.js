@@ -107,7 +107,7 @@ export function useAuthFlow({ sessionStore, showToast, log, onLoggedOut, onServe
         // must be visible: close member-only trays and say why the UI is now guest.
         if (!userInitiatedLogout) {
           try { onServerSignOut?.() } catch {}
-          try { showToast('Signed out after 30 minutes of inactivity. Log in to continue.', 'info', 8000) } catch {}
+          try { showToast('Signed out after 1 hour of inactivity. Log in to continue.', 'info', 8000) } catch {}
         }
         userInitiatedLogout = false
         return
