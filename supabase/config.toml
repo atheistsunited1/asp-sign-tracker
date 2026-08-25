@@ -121,11 +121,11 @@ site_url = "http://localhost:5173"
 # A list of *exact* URLs that auth providers are permitted to redirect to post authentication.
 additional_redirect_urls = ["http://localhost:5173"]
 # How long tokens are valid for, in seconds. Defaults to 3600 (1 hour), maximum 604,800 (1 week).
-# 600 (10 min) here, deliberately well below [auth.sessions] inactivity_timeout:
-# inactivity is measured from the last token refresh, so the access token must
-# expire (and refresh) more often than the inactivity window or active users get
-# signed out. See docs/adr/0002-session-inactivity-timeout.md.
-jwt_expiry = 600
+# Platform default (1 h), matching the hosted project. Inactivity is measured
+# from the last token refresh; supabase-js refreshes just before expiry, so an
+# open tab renews at ~59 min — inside the 1 h inactivity window below.
+# See docs/adr/0002-session-inactivity-timeout.md.
+jwt_expiry = 3600
 # Path to JWT signing key. DO NOT commit your signing keys file to git.
 # signing_keys_path = "./signing_keys.json"
 # If disabled, the refresh token will never expire.
@@ -222,7 +222,7 @@ max_frequency = "5s"
 # Force log out after the specified duration.
 # timebox = "24h"
 # Force log out if the user has been inactive longer than the specified duration.
-inactivity_timeout = "30m"
+inactivity_timeout = "1h"
 
 # This hook runs before a new user is created and allows developers to reject the request based on the incoming user object.
 # [auth.hook.before_user_created]
