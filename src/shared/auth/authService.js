@@ -22,6 +22,16 @@ export function signInWithPassword({ email, password }) {
   return supabase.auth.signInWithPassword({ email, password })
 }
 
+/** Magic-link email for an EXISTING account (never creates one). Used by the
+ *  signup flow when the email already has an account — the Magic Link email
+ *  template is dedicated to that "account already exists" message. */
+export function sendExistingAccountLoginLink({ email, emailRedirectTo }) {
+  return supabase.auth.signInWithOtp({
+    email,
+    options: { emailRedirectTo, shouldCreateUser: false },
+  })
+}
+
 export function signUp({ email, password, data, emailRedirectTo }) {
   return supabase.auth.signUp({
     email,

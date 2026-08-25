@@ -95,6 +95,7 @@ import {
   fetchProfileAccessByUserId,
   isUsernameAvailable,
   resetPasswordForEmail,
+  sendExistingAccountLoginLink,
   signInWithPassword,
   signOut,
   signUp,
@@ -211,9 +212,14 @@ async function onSignup () {
 
     const existingAccount = Array.isArray(data?.user?.identities) && data.user.identities.length === 0
     if (existingAccount) {
-      // Help them get in; nothing was created.
-      const reset = await resetPasswordForEmail(clean.email, { redirectTo: recoveryRedirectUrl() })
-      showToast(GENERIC_ACCOUNT_EMAIL_NOTICE, reset?.error ? 'info' : 'success')
+      // Nothing was created. The account owner gets the "an account already
+      // exists for this email" magic-link email (Magic Link template); the
+      // on-screen notice stays generic so signup can't probe registered emails.
+      const otp = await sendExistingAccountLoginLink({
+        email: clean.email,
+        emailRedirectTo: window.location.origin + '/',
+      })
+      showToast(GENERIC_ACCOUNT_EMAIL_NOTICE, otp?.error ? 'info' : 'success')
       mode.value = 'login'
       return
     }
