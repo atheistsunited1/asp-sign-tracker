@@ -11,8 +11,8 @@
 
       <form v-if="mode==='login'" @submit.prevent="onLogin">
         <div class="field">
-          <label>Email</label>
-          <input v-model.trim="login.email" type="email" autocomplete="email" required autofocus />
+          <label>Email or Username</label>
+          <input v-model.trim="login.identifier" type="text" autocomplete="username" required autofocus />
         </div>
         <div class="field">
           <label>Password</label>
@@ -28,7 +28,7 @@
         <div class="field">
           <label>Username</label>
           <div class="row">
-            <input v-model.trim="signup.username" @input="availability=null" required autofocus />
+            <input v-model.trim="signup.username" @input="availability=null" autocomplete="username" required autofocus />
             <button class="mini" type="button" @click="checkAvailability" :disabled="busy || !signup.username">Check</button>
 
           </div>
@@ -94,6 +94,7 @@ import { errorToUserMessage } from '@/shared/lib/errors'
 import { logger } from '@/shared/lib/logger'
 import {
   fetchProfileAccessByUserId,
+  signInWithUsername,
   isUsernameAvailable,
   resetPasswordForEmail,
   sendExistingAccountLoginLink,
@@ -110,7 +111,7 @@ const mode = ref(props.startMode)
 watch(() => props.startMode, v => { mode.value = v })
 
 const busy = ref(false)
-const login = ref({ email: '', password: '' })
+const login = ref({ identifier: '', password: '' })
 const signup = ref({ username: '', password: '', password2: '', email: '', zip: '', initials: '' })
 const forgot = ref({ email: '' })
 const availability = ref(null)
@@ -123,7 +124,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
 watch(mode, (m) => {
   if (m === 'forgot') {
     if (signup.value.email) forgot.value.email = signup.value.email
-    else if (login.value.email) forgot.value.email = login.value.email
+    else if (login.value.identifier?.includes('@')) forgot.value.email = login.value.identifier
   }
 })
 
@@ -144,14 +145,16 @@ async function checkAvailability () {
 async function onLogin () {
   busy.value = true
   try {
-    // Email-only login: the username → email lookup RPC was an
-    // anon-callable email-enumeration surface and is dropped (patch 000008).
-    const email = login.value.email.trim()
-    if (!email) { showToast('Invalid email or password.', 'error'); return }
+    // Email or username. Username login goes through the login_with_username
+    // edge function: the lookup happens server-side with uniform errors, so
+    // the username-to-email mapping is never disclosed (the old client-callable
+    // lookup RPC was dropped as an enumeration surface).
+    const id = login.value.identifier.trim()
+    if (!id || !login.value.password) { showToast('Invalid email/username or password.', 'error'); return }
 
-    const { data: signData, error: signErr } = await signInWithPassword({
-      email, password: login.value.password
-    })
+    const { data: signData, error: signErr } = id.includes('@')
+      ? await signInWithPassword({ email: id, password: login.value.password })
+      : await signInWithUsername({ username: id, password: login.value.password })
     if (signErr) throw signErr
 
     // Approval gate: unapproved accounts cannot log in at all.
@@ -246,7 +249,7 @@ async function onSignup () {
       availability.value = false
       showToast('That username is taken — please choose another.', 'error')
     } else if (e?.code === '23514' || /check constraint/i.test(raw)) {
-      showToast('Username must be 3–24 characters (letters, numbers, _ or .).', 'error')
+      showToast('Username must be 3–24 characters (letters, numbers, _ . or -).', 'error')
     } else {
       showToast(errorToUserMessage(e, raw || 'Sign up failed.'), 'error')
     }
