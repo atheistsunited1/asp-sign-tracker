@@ -106,6 +106,19 @@ async function anonProbes() {
     record(actor, 'may call public_photos_for_reports', !phErr, phErr?.code ?? 'ok')
   }
   {
+    // Patch 4: the email_in_use RPC must not exist (email-enumeration surface).
+    const { error } = await anon.rpc('email_in_use', { e: 'nobody@example.com' })
+    const absent = error?.code === 'PGRST202' || /Could not find the function/i.test(error?.message ?? '')
+    record(actor, 'email_in_use does not exist', absent, error?.message ?? 'RPC EXISTS')
+  }
+  {
+    // Patch 4: bucket listing is moderator-only; anon gets no listing rows
+    // (object URLs still work — the bucket is public).
+    const { data, error } = await anon.storage.from('sign-photos').list('', { limit: 1 })
+    record(actor, 'cannot list the sign-photos bucket', !!error || (data ?? []).length === 0,
+      error?.message ?? `${data?.length ?? 0} row(s)`)
+  }
+  {
     // Email-only login: the username → email lookup RPC must not exist (it was an
     // anon-callable enumeration surface). PGRST202 = function not found.
     const { error } = await anon.rpc('login_email_for_username', { u: '__rls_verify_nobody__' })

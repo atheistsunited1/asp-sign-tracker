@@ -22,10 +22,6 @@ export function signInWithPassword({ email, password }) {
   return supabase.auth.signInWithPassword({ email, password })
 }
 
-export function signInWithOtp({ email, emailRedirectTo }) {
-  return supabase.auth.signInWithOtp({ email, options: { emailRedirectTo } })
-}
-
 export function signUp({ email, password, data, emailRedirectTo }) {
   return supabase.auth.signUp({
     email,
@@ -52,10 +48,6 @@ export function updatePassword(password) {
 
 export function isUsernameAvailable(username) {
   return profilesRepo.rpcUsernameAvailable(username)
-}
-
-export function isEmailInUse(email) {
-  return profilesRepo.rpcEmailInUse(email)
 }
 
 export async function fetchProfileAccessByUserId(userId) {

@@ -93,10 +93,8 @@ import { validateUserPayload, validateUsername } from '@/shared/lib/validators'
 import { errorToUserMessage } from '@/shared/lib/errors'
 import {
   fetchProfileAccessByUserId,
-  isEmailInUse,
   isUsernameAvailable,
   resetPasswordForEmail,
-  signInWithOtp,
   signInWithPassword,
   signOut,
   signUp,
@@ -199,29 +197,10 @@ async function onSignup () {
 
   busy.value = true
   try {
-    // PRE-FLIGHT: email already present in profiles?
-    const { data: emailUsed, error: emailErr } = await isEmailInUse(clean.email)
-    if (emailErr) throw emailErr
-
-    if (emailUsed === true) {
-      // Help them get in; no inserts
-      const redirectTo = window.location.origin + '/'
-      const otp = await signInWithOtp({ email: clean.email, emailRedirectTo: redirectTo })
-      if (otp?.error) {
-        const reset = await resetPasswordForEmail(clean.email, { redirectTo: recoveryRedirectUrl() })
-        if (reset?.error) {
-          showToast(GENERIC_ACCOUNT_EMAIL_NOTICE, 'info')
-          mode.value = 'login'; return
-        }
-        showToast(GENERIC_ACCOUNT_EMAIL_NOTICE, 'success')
-      } else {
-        showToast(GENERIC_ACCOUNT_EMAIL_NOTICE, 'success')
-      }
-      mode.value = 'login'
-      return
-    }
-
-    // New email → create auth user
+    // No pre-flight email lookup — the email_in_use RPC was an anon-callable
+    // enumeration surface and is dropped (DB patch 4). With email
+    // confirmations ON, auth.signUp signals an already-registered email by
+    // returning an obfuscated user with an EMPTY identities array.
     const { data, error } = await signUp({
       email: clean.email,
       password: s.password,
@@ -229,6 +208,15 @@ async function onSignup () {
       emailRedirectTo: window.location.origin + '/',
     })
     if (error) throw error
+
+    const existingAccount = Array.isArray(data?.user?.identities) && data.user.identities.length === 0
+    if (existingAccount) {
+      // Help them get in; nothing was created.
+      const reset = await resetPasswordForEmail(clean.email, { redirectTo: recoveryRedirectUrl() })
+      showToast(GENERIC_ACCOUNT_EMAIL_NOTICE, reset?.error ? 'info' : 'success')
+      mode.value = 'login'
+      return
+    }
 
     const userId = data?.user?.id
     if (!userId) {

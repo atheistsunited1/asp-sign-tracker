@@ -16,15 +16,13 @@ export const profilesRepo = {
   rpcUsernameAvailable(username) {
     return supabase.rpc('username_available', { u: username })
   },
-  rpcEmailInUse(email) {
-    return supabase.rpc('email_in_use', { e: email })
-  },
   rpcAdminListProfiles(pendingOnly = false) {
     return supabase.rpc('admin_list_profiles', { pending_only: pendingOnly })
   },
   selectByInitials(initials = []) {
     return table().select('id, initials').in('initials', initials)
-  },
+  },
+
   updateById(id, payload) {
     return table().update(payload).eq('id', id)
   },

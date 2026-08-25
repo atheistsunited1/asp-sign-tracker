@@ -1,0 +1,17 @@
+# Releases flow develop -> main only. Rulesets can't restrict a PR's source
+# branch natively, so this required check fails any PR to main from elsewhere.
+name: Enforce release branch
+on:
+  pull_request:
+    branches: [main]
+jobs:
+  check-source:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Only develop may merge into main
+        run: |
+          if [ "${{ github.head_ref }}" != "develop" ]; then
+            echo "PRs to main must come from develop (got: ${{ github.head_ref }})."
+            exit 1
+          fi
+          echo "OK: release PR from develop."
