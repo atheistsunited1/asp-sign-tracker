@@ -364,6 +364,12 @@ enabled = true
 verify_jwt = false
 entrypoint = "./functions/purge_deleted/index.ts"
 
+[functions.reconcile_orphan_photos]
+enabled = true
+# Scheduled GC (cron-secret gated); no user JWT.
+verify_jwt = false
+entrypoint = "./functions/reconcile_orphan_photos/index.ts"
+
 [functions.mirror-photo]
 enabled = true
 verify_jwt = true
