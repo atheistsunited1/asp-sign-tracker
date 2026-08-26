@@ -42,8 +42,8 @@ in `src/shared/domain/` (`activitySubmissionService`, `photoUploadService`, `act
 
 - **Frontend:** Vue 3 (`<script setup>`), Vite, Vue Router, Leaflet 1.9, ECharts (dashboard)
 - **Backend:** Supabase — Postgres with Row-Level Security, Storage, Edge Functions (Deno)
-- **Auth:** Supabase Auth — email + password, email reset
-- **Notifications:** Discord webhooks
+- **Auth:** Supabase Auth — email or username + password, email confirmation and reset
+- **Notifications:** Discord bot (one channel per region)
 
 ## Repo layout
 
@@ -59,7 +59,8 @@ src/
   shared/         used by ≥2 pages: ui/ (domain-free), lib/ (pure helpers), domain/ (services +
                   domain logic), data/ (supabase client, repos, storage), auth/ (session, roles)
 supabase/
-  functions/      mirror-photo, notify_discord, purge_deleted (declared in config.toml)
+  functions/      login_with_username, mirror-photo, notify_discord, purge_deleted,
+                  reconcile_orphan_photos (declared in config.toml)
   db-patches/     the versioned schema ledger — see supabase/README.md
   db-snapshot/    the version-0 baseline schema export
 scripts/          verify-rls.mjs, smoke-routes.mjs, check-sizes.mjs, style-snapshot.mjs, debug/
@@ -94,13 +95,13 @@ fill in the Discord/purge secrets, then from `supabase/`:
 
 ```bash
 supabase secrets set --env-file .secrets.prod
-supabase functions deploy notify_discord mirror-photo purge_deleted
+supabase functions deploy login_with_username mirror-photo notify_discord purge_deleted reconcile_orphan_photos
 ```
 
 `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` are injected into hosted functions automatically —
 never put them in the file, never expose the service-role key to the frontend. Schedule
-`purge_deleted` daily (Dashboard → Edge Functions → Schedules; `POST`, body `{"days":30}`,
-header `x-cron-secret: <PURGE_CRON_SECRET>`).
+`purge_deleted` and `reconcile_orphan_photos` daily (a cron job `POST`ing with header
+`x-cron-secret: <PURGE_CRON_SECRET>`; bodies `{"days":30}` and `{"dryRun":false}`).
 
 ## Database & storage
 
@@ -109,7 +110,7 @@ header `x-cron-secret: <PURGE_CRON_SECRET>`).
 - Every table ships with RLS; `scripts/verify-rls.mjs` probes the access matrix from outside.
 - Storage: one public bucket `sign-photos`; every writer stores objects as
   `{pin_id}/{report_id}/{photo_id}.{ext}` (`src/shared/data/photoKeys.js`), and `photos.image_url`
-  holds the public URL (cleanup derives keys from it).
+  holds the public URL (cleanup derives keys from it). Writes are path-owned by storage RLS.
 
 ## Routing & roles
 
@@ -121,7 +122,7 @@ header `x-cron-secret: <PURGE_CRON_SECRET>`).
 | `/bulk-photo-reports`, `/manage-users` | admin |
 
 The router guard checks the session then the role gate (`src/shared/auth/roles.js`) — user
-experience only (ADR-0001). Sessions end after 30 minutes of inactivity — ADR-0002, including the
+experience only (ADR-0001). Sessions end after 1 hour of inactivity — ADR-0002, including the
 hosted-project settings that make it hold.
 
 ## Basemaps
