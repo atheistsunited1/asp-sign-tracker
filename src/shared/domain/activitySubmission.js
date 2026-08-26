@@ -20,10 +20,9 @@ export function deriveSubmissionVisuals({ reportType, signType = '', existingPin
   return { iconType, isMajor, iconColor }
 }
 
-/** Row for a NEW pending pin. `id` is only set when the caller minted it up front (photo keys). */
-export function buildPinInsertPayload({ id = null, lat, lng, fields = {}, city = null, state = null, submitter, visuals }) {
+/** Row for a NEW pending pin. The DB assigns the id (gen_random_uuid). */
+export function buildPinInsertPayload({ lat, lng, fields = {}, city = null, state = null, submitter, visuals }) {
   return {
-    ...(id ? { id } : {}),
     lat, lng,
     description: fields.locationDescription || null,
     sign_text: fields.signText || null,
@@ -54,10 +53,9 @@ export function buildMergedReportPayload({ reportType, originalPending = null, n
   return { report_type: reportType || originalPending?.report_type || null, updated_at: now }
 }
 
-/** Row for a NEW pending report. */
-export function buildReportInsertPayload({ id = null, pinId, reportType, submitter }) {
+/** Row for a NEW pending report. The DB assigns the id (gen_random_uuid). */
+export function buildReportInsertPayload({ pinId, reportType, submitter }) {
   return {
-    ...(id ? { id } : {}),
     pin_id: pinId,
     report_type: reportType || null,
     submitted_by: submitter,

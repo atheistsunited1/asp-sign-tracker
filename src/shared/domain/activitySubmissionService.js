@@ -98,14 +98,13 @@ export async function warmSupabaseLite() {
  * @param {string|null} p.existingPinId  set when the user chose an existing pin
  * @param {object|null} p.existingPin    that pin's row if known (drives merge + visuals)
  * @param {boolean} p.mergeIntoPending   merge into the existing pin when it is still pending
- * @param {string|null} p.provisionalPinId / p.provisionalReportId   ids minted before upload (photo keys)
  * @param {string} p.updateNote          quick-update note appended to an existing pin's description (non-fatal)
  * @param {AbortSignal} p.signal
  * @returns {{ pinId, reportId, pinRow, city, state, isExistingPin, merged, noteError }}
  */
 export async function submitActivity({
   lat, lng, submitter, fields = {}, existingPinId = null, existingPin = null, mergeIntoPending = false,
-  provisionalPinId = null, provisionalReportId = null, updateNote = '', signal = undefined,
+  updateNote = '', signal = undefined,
 } = {}) {
   const isExistingPin = !!(existingPinId || existingPin?.id)
   const targetId = existingPinId || existingPin?.id || null
@@ -122,7 +121,7 @@ export async function submitActivity({
   let pinId = targetId, pinRow = null
   if (!isExistingPin) {
     const { data, error } = await withTimeout(
-      insertPin(buildPinInsertPayload({ id: provisionalPinId, lat, lng, fields, city, state, submitter, visuals }), signal),
+      insertPin(buildPinInsertPayload({ lat, lng, fields, city, state, submitter, visuals }), signal),
       T.insertPin, 'submit:insertPin',
     )
     if (error) throw error
@@ -155,7 +154,7 @@ export async function submitActivity({
   }
   if (!reportId) {
     const { data, error } = await withTimeout(
-      insertReport(buildReportInsertPayload({ id: provisionalReportId, pinId, reportType: fields.reportType, submitter }), signal),
+      insertReport(buildReportInsertPayload({ pinId, reportType: fields.reportType, submitter }), signal),
       T.insertReport, 'submit:insertReport',
     )
     if (error) throw error
