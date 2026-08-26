@@ -29,13 +29,13 @@ describe('payload builders', () => {
   const visuals = { iconType: 'reported', iconColor: '#abc', isMajor: false }
   const fields = { reportType: 'sighting', signText: 'Jesus Saves', signType: 'sign', locationDescription: 'I-95 exit 12' }
 
-  it('buildPinInsertPayload sets the provisional id only when given', () => {
-    const row = buildPinInsertPayload({ id: 'p1', lat: 1, lng: 2, fields, city: 'X', state: 'NC', submitter: 'u1', visuals })
+  it('buildPinInsertPayload builds a pending pin row; the DB assigns the id', () => {
+    const row = buildPinInsertPayload({ lat: 1, lng: 2, fields, city: 'X', state: 'NC', submitter: 'u1', visuals })
     expect(row).toEqual({
-      id: 'p1', lat: 1, lng: 2, description: 'I-95 exit 12', sign_text: 'Jesus Saves', sign_type: 'sign',
+      lat: 1, lng: 2, description: 'I-95 exit 12', sign_text: 'Jesus Saves', sign_type: 'sign',
       city: 'X', state: 'NC', is_approved: false, submitted_by: 'u1', icon_type: 'reported', icon_color: '#abc',
     })
-    expect(buildPinInsertPayload({ lat: 1, lng: 2, fields: {}, submitter: 'u1', visuals })).not.toHaveProperty('id')
+    expect(row).not.toHaveProperty('id')
     expect(buildPinInsertPayload({ lat: 1, lng: 2, fields: {}, submitter: 'u1', visuals }).sign_text).toBeNull()
   })
 
@@ -49,9 +49,9 @@ describe('payload builders', () => {
     expect(buildMergedReportPayload({ reportType: 'plundered', originalPending: { report_type: 'krakened' }, now: 'T' }).report_type).toBe('plundered')
   })
 
-  it('buildReportInsertPayload', () => {
-    expect(buildReportInsertPayload({ id: 'r1', pinId: 'p1', reportType: 'sighting', submitter: 'u1' }))
-      .toEqual({ id: 'r1', pin_id: 'p1', report_type: 'sighting', submitted_by: 'u1', is_approved: false })
+  it('buildReportInsertPayload builds a pending report row; the DB assigns the id', () => {
+    expect(buildReportInsertPayload({ pinId: 'p1', reportType: 'sighting', submitter: 'u1' }))
+      .toEqual({ pin_id: 'p1', report_type: 'sighting', submitted_by: 'u1', is_approved: false })
     expect(buildReportInsertPayload({ pinId: 'p1', reportType: '', submitter: 'u1' })).toEqual({ pin_id: 'p1', report_type: null, submitted_by: 'u1', is_approved: false })
   })
 })

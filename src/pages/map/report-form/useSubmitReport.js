@@ -8,7 +8,6 @@ import { errorToUserMessage } from '@/shared/lib/errors'
 import { logger } from '@/shared/lib/logger'
 import { expectEvent } from '@/shared/lib/debug'
 import { getSession, refreshSession } from '@/shared/auth/authService'
-import { newPhotoId } from '@/shared/data/photoStorage'
 import { findNearbyPinsForSubmission } from '@/shared/domain/nearbyPinsService'
 import { uploadActivityPhotos } from '@/shared/domain/photoUploadService'
 import { submitActivity, attachPhotoUrls, resolveSubmitterName, warmSupabaseLite } from '@/shared/domain/activitySubmissionService'
@@ -250,18 +249,6 @@ export function useSubmitReport({ form, photos, user, userProfile, showToast, lo
     }, 20000)
 
     try {
-      // Ids are minted here so photo keys can be {pin}/{report}/… before the rows exist.
-      // (When merging into an existing pending report, the key uses this provisional
-      // report id — the DB row, not the key, is the source of truth.)
-      const provisionalPinId = form.selectedPinId.value || newPhotoId()
-      const provisionalReportId = newPhotoId()
-
-      // Upload photos first (rows are attached once the report exists)
-      const photoUrls = await withTimeout(
-        uploadStagedPhotos({ signal, pinId: provisionalPinId, reportId: provisionalReportId }),
-        15000, 'submit:uploads',
-      )
-
       const isExistingPin = !!form.selectedPinId.value
       const targetPin = form.selectedPin.value || form.nearbyPins.value.find(p => p.id === form.selectedPinId.value) || null
 
@@ -271,6 +258,9 @@ export function useSubmitReport({ form, photos, user, userProfile, showToast, lo
         return
       }
 
+      // Rows first: the pin/report must exist before photos upload, so storage
+      // keys reference real, owned ids (storage RLS validates path ownership,
+      // DB patch 6). This matches the Bulk Photos flow.
       const result = await submitActivity({
         lat, lng,
         submitter: session.user.id,
@@ -283,7 +273,6 @@ export function useSubmitReport({ form, photos, user, userProfile, showToast, lo
         existingPinId: form.selectedPinId.value,
         existingPin: targetPin,
         mergeIntoPending: form.mergePendingExistingFromNearby.value,
-        provisionalPinId, provisionalReportId,
         updateNote: isExistingPin ? form.updateNote.value : '',
         signal,
       })
@@ -295,12 +284,21 @@ export function useSubmitReport({ form, photos, user, userProfile, showToast, lo
         showToast('Submitted, but the note could not be saved.', 'error')
       }
 
-      // Attach photos (non-fatal)
-      if (photoUrls.length && result.reportId) {
-        const { error } = await attachPhotoUrls(result.reportId, photoUrls, signal).catch((e) => ({ error: e }))
-        if (error) {
-          logger.warn('ReportForm attach photos failed after submit', error)
-          showToast('Submitted, but attaching photos failed.', 'error')
+      // Then upload photos under the real {pin}/{report}/ key and attach them.
+      // The report is already saved; a photo failure is non-fatal (the submitter
+      // can add photos afterward from the Reports page).
+      let photoUrls = []
+      if (result.reportId) {
+        photoUrls = await withTimeout(
+          uploadStagedPhotos({ signal, pinId: result.pinId, reportId: result.reportId }),
+          15000, 'submit:uploads',
+        )
+        if (photoUrls.length) {
+          const { error } = await attachPhotoUrls(result.reportId, photoUrls, signal).catch((e) => ({ error: e }))
+          if (error) {
+            logger.warn('ReportForm attach photos failed after submit', error)
+            showToast('Submitted, but attaching photos failed. You can add photos from Reports.', 'error')
+          }
         }
       }
 

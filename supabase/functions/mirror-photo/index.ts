@@ -4,6 +4,13 @@
 // rendition it wants (e.g. `fife=s800-rj-l60`), so the bytes arrive already
 // resized and compressed. This function exists only because the image host
 // sends no CORS headers, so the browser cannot read the bytes itself.
+//
+// It uploads AS THE CALLER (the forwarded JWT), NOT the service role, so the
+// upload is subject to the `sign-photos` storage RLS — the same path-ownership
+// rule (`can_write_sign_photo`) that governs direct client uploads (DB patch 6).
+// There is no service-role bypass and no in-code auth gate: RLS is the single
+// enforcement point (moderator, or approved member writing to their own pending
+// report's folder). verify_jwt=true still requires a signed-in caller.
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.5";
 
@@ -20,7 +27,6 @@ const CORS = {
 };
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
-const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!;
 
 const FETCH_TIMEOUT_MS = 30_000;
@@ -56,21 +62,18 @@ Deno.serve(async (req) => {
     const body = (await req.json()) as Req;
     if (!body?.url) return json({ ok: false, error: "Missing 'url' in request body" });
     if (!body?.path?.trim()) return json({ ok: false, error: "Missing 'path' in request body" });
-    if (!SUPABASE_URL || !SERVICE_ROLE_KEY) return json({ ok: false, error: "Missing SUPABASE_URL or SERVICE_ROLE_KEY" });
+    if (!SUPABASE_URL || !ANON_KEY) return json({ ok: false, error: "Missing SUPABASE_URL or SUPABASE_ANON_KEY" });
 
     const bucket = (body.bucket || "sign-photos").trim();
 
-    // Authorization: this function uploads with the service role (bypassing
-    // storage RLS), so it must gate the caller itself. Only approved members
-    // may mirror — evaluated as the caller via their forwarded JWT.
+    // Upload as the caller: their JWT is forwarded, so storage RLS decides
+    // whether this path may be written (path-ownership; no service role).
     const authHeader = req.headers.get("Authorization") || "";
     if (!authHeader) return json({ ok: false, error: "unauthorized" });
     const asCaller = createClient(SUPABASE_URL, ANON_KEY, {
       global: { headers: { Authorization: authHeader } },
       auth: { persistSession: false },
     });
-    const { data: approved, error: approvedErr } = await asCaller.rpc("is_approved_member");
-    if (approvedErr || approved !== true) return json({ ok: false, error: "not an approved member" });
 
     const res = await fetchWithTimeout(body.url, FETCH_TIMEOUT_MS);
     if (!res.ok) throw new Error(`fetch ${res.status}`);
@@ -84,15 +87,14 @@ Deno.serve(async (req) => {
     let path = body.path.trim();
     if (!/\.[a-z0-9]{2,5}$/i.test(path)) path += EXT_FOR_TYPE[contentType] || ".jpg";
 
-    const sb = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
-    const { error: upErr } = await sb.storage.from(bucket).upload(path, bytes, {
+    const { error: upErr } = await asCaller.storage.from(bucket).upload(path, bytes, {
       contentType,
       upsert: false,
       cacheControl: "31536000",
     });
     if (upErr) throw upErr;
 
-    const { data } = sb.storage.from(bucket).getPublicUrl(path);
+    const { data } = asCaller.storage.from(bucket).getPublicUrl(path);
     return json({ ok: true, status: "mirrored", publicUrl: data.publicUrl, size: bytes.length, contentType });
   } catch (e) {
     return json({ ok: false, error: String((e as Error)?.message || e) });

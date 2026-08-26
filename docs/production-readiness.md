@@ -65,11 +65,14 @@ this repo.
 |---|---|
 | `notify_discord` | Posts sighting notifications to the regional Discord channel ([#6](https://github.com/atheistsunited1/asp-sign-tracker/issues/6)) |
 | `login_with_username` | Username login (server-side email lookup) |
-| `mirror-photo` | Copies external photo URLs into the `sign-photos` storage bucket |
+| `mirror-photo` | Copies external photo URLs into the `sign-photos` bucket, uploading **as the caller** (storage RLS enforces path-ownership; no service-role bypass) |
 | `purge_deleted` | Hard-deletes soft-deleted rows older than 30 days; invoked by a daily cron (09:00 UTC, pg_cron + pg_net), authenticated by a shared secret |
+| `reconcile_orphan_photos` | Scheduled GC: removes storage objects with no `photos` row, older than a grace window (dry-run by default); cron-secret gated |
 
 Storage: `sign-photos` is a public-read bucket (object URLs work for everyone); bucket
-*listing* is moderator-only.
+*listing* is moderator-only. Writes are **path-owned** — an object may be written only by a
+moderator, or by the approved member who owns the pending report named in the key
+(`can_write_sign_photo`, DB patch 6); the same rule governs both direct uploads and `mirror-photo`.
 
 ## Access & secrets
 
