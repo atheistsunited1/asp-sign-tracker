@@ -37,31 +37,25 @@ function toStorageKey(urlOrPath: string): string {
   try { return decodeURIComponent(raw.slice(idx + PUBLIC_TOKEN.length)); } catch { return raw.slice(idx + PUBLIC_TOKEN.length); }
 }
 
-// Recursively list every object key under the bucket (folders are pin/report ids).
+// Enumerate every object in the bucket via a keyset-paginated definer RPC
+// (DB patch 7). The Storage list API is per-folder and non-recursive, so at
+// production volume walking folders exhausts the worker; one indexed query per
+// 1000 rows against storage.objects scales instead.
 async function listAllKeys(sb: ReturnType<typeof createClient>): Promise<{ key: string; createdAt: number }[]> {
   const out: { key: string; createdAt: number }[] = [];
-  async function walk(prefix: string) {
-    let offset = 0;
-    const pageSize = 1000;
-    for (;;) {
-      const { data, error } = await sb.storage.from(PHOTO_BUCKET)
-        .list(prefix, { limit: pageSize, offset, sortBy: { column: "name", order: "asc" } });
-      if (error) throw error;
-      const rows = data || [];
-      for (const row of rows) {
-        const full = prefix ? `${prefix}/${row.name}` : row.name;
-        if (row.id === null && !row.metadata) {
-          await walk(full);                       // a folder
-        } else {
-          const created = row.created_at ? Date.parse(row.created_at) : 0;
-          out.push({ key: full, createdAt: Number.isFinite(created) ? created : 0 });
-        }
-      }
-      if (rows.length < pageSize) break;
-      offset += pageSize;
+  let after: string | null = null;
+  const page = 1000;
+  for (;;) {
+    const { data, error } = await sb.rpc("list_sign_photo_objects", { p_after: after, p_limit: page });
+    if (error) throw error;
+    const rows = (data || []) as { name: string; created_at: string | null }[];
+    for (const r of rows) {
+      const created = r.created_at ? Date.parse(r.created_at) : 0;
+      out.push({ key: r.name, createdAt: Number.isFinite(created) ? created : 0 });
     }
+    if (rows.length < page) break;
+    after = rows[rows.length - 1].name;
   }
-  await walk("");
   return out;
 }
 
