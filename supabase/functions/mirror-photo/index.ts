@@ -21,6 +21,7 @@ const CORS = {
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+const ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!;
 
 const FETCH_TIMEOUT_MS = 30_000;
 const MAX_BYTES = 10 * 1024 * 1024; // sanity ceiling — a rendition should be tens of KB
@@ -58,6 +59,18 @@ Deno.serve(async (req) => {
     if (!SUPABASE_URL || !SERVICE_ROLE_KEY) return json({ ok: false, error: "Missing SUPABASE_URL or SERVICE_ROLE_KEY" });
 
     const bucket = (body.bucket || "sign-photos").trim();
+
+    // Authorization: this function uploads with the service role (bypassing
+    // storage RLS), so it must gate the caller itself. Only approved members
+    // may mirror — evaluated as the caller via their forwarded JWT.
+    const authHeader = req.headers.get("Authorization") || "";
+    if (!authHeader) return json({ ok: false, error: "unauthorized" });
+    const asCaller = createClient(SUPABASE_URL, ANON_KEY, {
+      global: { headers: { Authorization: authHeader } },
+      auth: { persistSession: false },
+    });
+    const { data: approved, error: approvedErr } = await asCaller.rpc("is_approved_member");
+    if (approvedErr || approved !== true) return json({ ok: false, error: "not an approved member" });
 
     const res = await fetchWithTimeout(body.url, FETCH_TIMEOUT_MS);
     if (!res.ok) throw new Error(`fetch ${res.status}`);
