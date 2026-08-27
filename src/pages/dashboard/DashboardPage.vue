@@ -59,11 +59,6 @@
           <div class="v">{{ fmt(m.questionable.snapshot.total) }}</div>
           <div class="s">+{{ fmt(m.questionable.period) }} this period · <Pct :value="m.questionable.pct" /> vs previous</div>
         </div>
-        <div class="tile">
-          <div class="k">Billboards</div>
-          <div class="v">{{ fmt(m.billboards.total) }}</div>
-          <div class="s">{{ fmt(m.billboards.major) }} major campaign</div>
-        </div>
       </div>
 
       <!-- Sections in the quarterly report's order -->
@@ -93,7 +88,7 @@
       <section class="card">
         <div class="card-title">📈 Quarterly trend</div>
         <TrendChart v-bind="m.trend" />
-        <p class="muted small">Backlog at quarter end is reconstructed from activity dates (signs seen by then minus plunders/krakenings by then, excluding billboards and questionable pins).</p>
+        <p class="muted small">Backlog at quarter end is reconstructed from activity dates (signs seen by then minus plunders/krakenings by then, excluding questionable pins).</p>
       </section>
 
       <!-- States -->
@@ -168,7 +163,7 @@ const sections = computed(() => m.value ? [
 const stateCols = [
   { key: 'state', label: 'State' }, { key: 'total', label: 'Signs' },
   { key: 'sighting', label: 'Waiting' }, { key: 'plundered', label: 'Plundered' }, { key: 'krakened', label: 'Krakened' },
-  { key: 'questionable', label: 'Questionable' }, { key: 'billboard', label: 'Billboards' },
+  { key: 'questionable', label: 'Questionable' },
   { key: 'periodNew', label: 'New (period)' }, { key: 'periodPlundered', label: 'Plundered (period)' }, { key: 'periodKrakened', label: 'Krakened (period)' },
 ]
 const sortKey = ref('total'), sortDir = ref(-1)

@@ -18,10 +18,6 @@ export function usePinMarkers(ctx) {
   const S = ctx.state
 
   function categoryValueForMarker(marker) {
-    if (marker.__iconType === ctx.ICON_TYPES.REPORTED_SIGNS &&
-        ctx.isBillboardSignType(marker.__signType)) {
-      return ctx.CATEGORY_BILLBOARD
-    }
     return marker.__iconType
   }
 
@@ -85,9 +81,6 @@ export function usePinMarkers(ctx) {
   }
 
   function colorForCategory(cat) {
-    if (cat === ctx.CATEGORY_BILLBOARD) {
-      return { fill: '#0288D1', stroke: STROKE_DARK }
-    }
     const fill = BASE_HEX[cat] || '#4E5A66'
     // Match main pin rule:
     const stroke =
@@ -159,7 +152,7 @@ export function usePinMarkers(ctx) {
           ctx.lineTo(p.x - radius, p.y);
           ctx.closePath();
         } else if (shape === 'hrect') {
-          // horizontal rectangle used for billboard pins
+          // horizontal rectangle shape
           const w = radius * 2.4;
           const h = radius * 1.2;
           ctx.rect(p.x - w / 2, p.y - h / 2, w, h);
@@ -218,8 +211,7 @@ export function usePinMarkers(ctx) {
 
     // choose shape by category
     let shape = 'circle';
-    if (ctx.isBillboardSignType(pin?.sign_type)) shape = 'hrect';
-    else if (pin.icon_type === ctx.ICON_TYPES.PLUNDERED) shape = 'diamond';
+    if (pin.icon_type === ctx.ICON_TYPES.PLUNDERED) shape = 'diamond';
     else if (pin.icon_type === ctx.ICON_TYPES.KRAKENED) shape = 'square';
     // reported + questionable stay circles
 
@@ -243,7 +235,7 @@ export function usePinMarkers(ctx) {
     marker.__lng = pin.lng;
     marker.__iconType = pin.icon_type;
     marker.__signType = pin.sign_type || '';
-    marker.__drawPriority = drawPriorityForPin({ iconType: pin.icon_type, signType: pin.sign_type });
+    marker.__drawPriority = drawPriorityForPin({ iconType: pin.icon_type });
     marker.__iconColor = pin.icon_color || '';
     marker.__approved = !pending;
     marker.__friendlyId = pin.friendly_id || '';

@@ -4,7 +4,7 @@
 //
 // Payload shape (patch 000007):
 //   snapshot[] { bucket, is_major_campaign, campaign, state, n }
-//   activity[] { window:'period'|'previous', report_type, is_major_campaign, campaign, state, is_billboard, n }
+//   activity[] { window:'period'|'previous', report_type, is_major_campaign, campaign, state, n }
 //   trend[]    { quarter:'YYYY-Qn', report_type, n }     (report_type incl. first_sighting, backlog_end)
 //   members[]  { window, username, report_type, n }
 
@@ -61,7 +61,6 @@ export function buildDashboardModel(stats) {
   const trendRows = stats?.trend || []
   const memberRows = stats?.members || []
 
-  const notBillboard = (r) => !r.is_billboard
   const trackedNow = sum(activity, (r) => r.window === 'period' && r.report_type === 'tracked_total')
   const trackedPrev = sum(activity, (r) => r.window === 'previous' && r.report_type === 'tracked_total')
   const added = periodStat(activity, 'first_sighting')
@@ -71,15 +70,15 @@ export function buildDashboardModel(stats) {
   const questionable = { ...periodStat(activity, 'questionable'), ...breakdown(activity, 'questionable'), snapshot: snapshotSplit(snapshot, (r) => r.bucket === 'questionable') }
   const sightings = { ...periodStat(activity, 'sighting'), ...breakdown(activity, 'sighting') }
 
-  // Treasure in waiting: live backlog = sighting bucket, not billboards; period change ≈
-  // new non-billboard signs − plunders − krakenings in the period (same split per slice).
+  // Treasure in waiting: live backlog = sighting bucket; period change ≈
+  // new signs − plunders − krakenings in the period (same split per slice).
   const backlogSnap = snapshotSplit(snapshot, (r) => r.bucket === 'sighting')
-  const newSigns = breakdown(activity, 'first_sighting', notBillboard)
-  const plNB = breakdown(activity, 'plundered', notBillboard)
-  const krNB = breakdown(activity, 'krakened', notBillboard)
-  const newPeriod = periodStat(activity, 'first_sighting', notBillboard)
-  const plPeriod = periodStat(activity, 'plundered', notBillboard)
-  const krPeriod = periodStat(activity, 'krakened', notBillboard)
+  const newSigns = breakdown(activity, 'first_sighting')
+  const plNB = breakdown(activity, 'plundered')
+  const krNB = breakdown(activity, 'krakened')
+  const newPeriod = periodStat(activity, 'first_sighting')
+  const plPeriod = periodStat(activity, 'plundered')
+  const krPeriod = periodStat(activity, 'krakened')
   const netKeys = ['major', 'js', 'jicr', 'otherMajor', 'nonMajor', 'ca', 'caNonMajor', 'outsideCa', 'outsideCaNonMajor']
   const backlog = {
     snapshot: backlogSnap,
@@ -89,8 +88,6 @@ export function buildDashboardModel(stats) {
     ...Object.fromEntries(netKeys.map((k) => [k, newSigns[k] - plNB[k] - krNB[k]])),
   }
   backlog.delta = backlog.period - backlog.previous
-
-  const billboards = snapshotSplit(snapshot, (r) => r.bucket === 'billboard')
 
   // Trend
   const quarters = [...new Set(trendRows.map((r) => r.quarter))].sort()
@@ -112,10 +109,10 @@ export function buildDashboardModel(stats) {
     const row = {
       state: st,
       sighting: snap('sighting'), plundered: snap('plundered'), krakened: snap('krakened'),
-      questionable: snap('questionable'), billboard: snap('billboard'),
+      questionable: snap('questionable'),
       periodNew: per('first_sighting'), periodPlundered: per('plundered'), periodKrakened: per('krakened'), periodQuestionable: per('questionable'),
     }
-    row.total = row.sighting + row.plundered + row.krakened + row.questionable + row.billboard
+    row.total = row.sighting + row.plundered + row.krakened + row.questionable
     return row
   }).sort((a, b) => b.total - a.total)
 
@@ -134,7 +131,7 @@ export function buildDashboardModel(stats) {
     period: stats?.period || null,
     previous: stats?.previous || null,
     tracked: { total: trackedNow, previousTotal: trackedPrev, added: added.period, addedPrevious: added.previous, pct: pct(trackedNow, trackedPrev) },
-    plundered, krakened, questionable, sightings, backlog, billboards,
+    plundered, krakened, questionable, sightings, backlog,
     trend, states, members,
   }
 }
