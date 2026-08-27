@@ -28,12 +28,12 @@ const dlog = (...args) => { if (DEBUG_REVIEW) logger.debug('Reports debug', args
  * @param {object} deps
  * @param {object} deps.feed      useReportsFeed instance
  * @param {object} deps.detail    useReportDetail instance
- * @param {Ref<boolean>} deps.isAdmin
+ * @param {Ref<boolean>} deps.isMapmasterOrHigher
  * @param {Ref} deps.user
  * @param {Function} deps.showToast
  * @param {Function} deps.confirm
  */
-export function useReportActions({ feed, detail, isAdmin, user, showToast, confirm }) {
+export function useReportActions({ feed, detail, isMapmasterOrHigher, user, showToast, confirm }) {
   const { editing } = detail
   const busy = reactive({})               // { [reportId]: boolean }
   const latestFinalByPin = reactive({})   // { [pin_id]: ISO date or null } — latest approved terminal activity
@@ -76,7 +76,7 @@ export function useReportActions({ feed, detail, isAdmin, user, showToast, confi
     const row = feed.selected.value
     if (!row) return
     if (!detail.validateAndSetGsvIntoEditing()) return
-    const can = feed.activeTab.value === 'approved' ? isAdmin.value : (isAdmin.value || feed.isOwner.value)
+    const can = feed.activeTab.value === 'approved' ? isMapmasterOrHigher.value : (isMapmasterOrHigher.value || feed.isOwner.value)
     if (!can) { showToast('You don’t have permission to update this item.', 'error'); return }
     const keepId = row.id
 
@@ -100,7 +100,7 @@ export function useReportActions({ feed, detail, isAdmin, user, showToast, confi
         iconType: nextIconType,
         isMajorCampaign: !!editing.is_major_campaign,
         signType: nz(editing.sign_type_edit) ?? row.pin_sign_type ?? '',
-        requestedColor: isAdmin.value ? editing.icon_color_edit : '',
+        requestedColor: isMapmasterOrHigher.value ? editing.icon_color_edit : '',
       })
       const reportUpdate = { report_type: nz(editing.report_type) ?? row.report_type ?? 'sighting', updated_at: new Date().toISOString() }
       dlog('reportUpdate payload →', { reportId: row.id, reportUpdate })
@@ -217,7 +217,7 @@ export function useReportActions({ feed, detail, isAdmin, user, showToast, confi
 
   // ---- delete -------------------------------------------------------------------
   async function onDeleteApproved(reportId) {
-    if (!isAdmin.value) return
+    if (!isMapmasterOrHigher.value) return
     const ok = await confirm({ title: 'Delete approved activity?', message: 'This activity will move to Deleted and can be restored for 30 days.', confirmText: 'Delete', cancelText: 'Cancel', tone: 'danger' })
     if (!ok) return
     busy[reportId] = true

@@ -70,8 +70,8 @@ this repo.
 | `reconcile_orphan_photos` | Scheduled GC: removes storage objects with no `photos` row, older than a grace window (dry-run by default); cron-secret gated |
 
 Storage: `sign-photos` is a public-read bucket (object URLs work for everyone); bucket
-*listing* is moderator-only. Writes are **path-owned** — an object may be written only by a
-moderator, or by the approved member who owns the pending report named in the key
+*listing* is mapmaster/admin-only. Writes are **path-owned** — an object may be written only by a
+mapmaster/admin, or by the approved member who owns the pending report named in the key
 (`can_write_sign_photo`, DB patch 6); the same rule governs both direct uploads and `mirror-photo`.
 
 ## Access & secrets

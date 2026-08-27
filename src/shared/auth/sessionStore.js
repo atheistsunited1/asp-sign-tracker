@@ -1,5 +1,5 @@
 import { computed, ref } from 'vue'
-import { normalizeRole, isModeratorRole } from '@/shared/auth/roles'
+import { normalizeRole, isMapmasterOrHigherRole } from '@/shared/auth/roles'
 import { profilesRepo } from '@/shared/data/repos/profilesRepo'
 import { getSession as getAuthSession, onAuthStateChange, signOut } from '@/shared/auth/authService'
 
@@ -10,7 +10,7 @@ const pendingSignup = ref(null)
 const dbOffline = ref(false)
 
 const isAdmin = computed(() => userRole.value === 'admin')
-const canModerate = computed(() => isModeratorRole(userRole.value))
+const isMapmasterOrHigher = computed(() => isMapmasterOrHigherRole(userRole.value))
 
 function clearAuthState() {
   user.value = null
@@ -126,7 +126,7 @@ export function useSessionStore() {
     pendingSignup,
     dbOffline,
     isAdmin,
-    canModerate,
+    isMapmasterOrHigher,
     clearAuthState,
     setDbOfflineFlag,
     loadProfile,

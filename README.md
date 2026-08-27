@@ -2,7 +2,7 @@
 
 A mobile-first, map-based app for documenting illegally posted signs and the activity around them
 (sightings, removals), built for the Atheist Street Pirates ([Atheists United](https://www.atheistsunited.org/streetpirates)).
-Members report signs with photos and GPS; moderators de-dupe, approve and publish to a shared map.
+Members report signs with photos and GPS; mapmasters/admins de-dupe, approve and publish to a shared map.
 It replaces text threads and Google My Maps with a standardized, auditable pipeline.
 
 The domain vocabulary (pin, activity, plundered, krakened, Major Campaign, …) is defined once in
@@ -29,7 +29,7 @@ Member → report form (or bulk photos)
   rows:     new pending pin — or merge into an existing pending pin + its oldest pending report
   then:     fire-and-forget Discord notification
 
-Moderator → /reports
+Mapmaster/admin → /reports (approve/deny actions)
   approve:  pin + activity become visible on the map (lifecycle guarded: no duplicate finals)
   deny:     soft-delete with audit trail; /reports/deleted restores or purges within 30 days
   cleanup:  scheduled purge_deleted edge function hard-deletes expired soft-deletes

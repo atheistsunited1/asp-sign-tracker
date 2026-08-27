@@ -57,13 +57,13 @@ export function nextIdAfter(list, removedId) {
 /**
  * @param {object} deps
  * @param {Ref} deps.user            injected user ref
- * @param {Ref<boolean>} deps.isAdmin
+ * @param {Ref<boolean>} deps.isMapmasterOrHigher
  * @param {object} deps.filters      reactive filters (useReportFilters)
  * @param {object} deps.deleted      useDeletedPins instance (the Deleted tab)
  * @param {(row) => void} deps.onSelected        detail/photos/map side effects for a selected row
  * @param {(rows) => void} deps.onRowsLoaded     photo cache seeding
  */
-export function useReportsFeed({ user, isAdmin, filters, deleted, onSelected, onRowsLoaded }) {
+export function useReportsFeed({ user, isMapmasterOrHigher, filters, deleted, onSelected, onRowsLoaded }) {
   const activeTab = ref('submitted')          // 'submitted' | 'approved' | 'deleted'
   const submitted = ref([])
   const approved = ref([])

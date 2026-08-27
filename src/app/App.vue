@@ -83,8 +83,8 @@ const { show: showToast } = useToast()
 /* --- app state --- */
 const supabasePins = ref([])
 const sessionStore = useSessionStore()
-const { user, isAdmin, userRole, userProfile, canModerate, pendingSignup, dbOffline } = sessionStore
-const canUseMapOps = computed(() => canModerate.value)
+const { user, isAdmin, userRole, userProfile, isMapmasterOrHigher, pendingSignup, dbOffline } = sessionStore
+const canUseMapOps = computed(() => isMapmasterOrHigher.value)
 const isHome = computed(() => route.path === '/')
 
 const nav = useShellNav({ router, user, isAdmin, canUseMapOps, showToast })
@@ -104,7 +104,7 @@ provide('user', user)
 provide('isAdmin', isAdmin)
 provide('userRole', userRole)
 provide('userProfile', userProfile)
-provide('canModerate', canModerate)
+provide('isMapmasterOrHigher', isMapmasterOrHigher)
 provide(APP_SHELL_CTX, { user, isAdmin, userRole, userProfile, pendingSignup, canUseMapOps, nav, auth, debug })
 
 function installIOSZoomGuards() {

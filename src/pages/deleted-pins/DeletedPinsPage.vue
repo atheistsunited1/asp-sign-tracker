@@ -114,7 +114,7 @@ function prevPhoto() { if (viewer.items.length) viewer.index = (viewer.index - 1
 
 // --- list (shared), restore preview, force delete -------------------------------------
 const list = useDeletedPins({
-  isAdmin: ref(true),                // the route is mapmaster-only (router guard)
+  isMapmasterOrHigher: ref(true),                // the route is mapmaster-only (router guard)
   actorId,
   getFilters: () => filters,
   pageSize: 250,

@@ -15,7 +15,7 @@
 
       <!-- Action bar: below the head on desktop, sticky bottom bar on mobile -->
       <div class="action-bar actions">
-        <span class="edit-first" v-if="(activeTab==='approved' && isAdmin) || (activeTab==='submitted' && (isAdmin || isOwner))">
+        <span class="edit-first" v-if="(activeTab==='approved' && isMapmasterOrHigher) || (activeTab==='submitted' && (isMapmasterOrHigher || isOwner))">
           <template v-if="!editMode">
             <button class="ghost" @click="enterEdit">✏️ Edit</button>
           </template>
@@ -37,11 +37,11 @@
         <span class="muted" v-if="uploadingPhotos">Uploading {{ uploadProgress.done }}/{{ uploadProgress.total }}…</span>
         <input :id="`extra-files-${r.id}`" type="file" accept="image/*" multiple style="display:none" @change="onExtraPhotosChange(r.id, $event)" />
 
-        <template v-if="activeTab==='submitted' && isAdmin">
+        <template v-if="activeTab==='submitted' && isMapmasterOrHigher">
           <button v-if="!disableApprove(r)" class="approve" :disabled="busy[r.id]" @click.stop="onApprove(r)">✅ Approve</button>
           <button class="danger" :disabled="busy[r.id]" @click.stop="onDeleteSubmitted(r.id)">🗑 Delete</button>
         </template>
-        <template v-if="activeTab==='approved' && isAdmin">
+        <template v-if="activeTab==='approved' && isMapmasterOrHigher">
           <button class="danger" :disabled="busy[r.id]" @click.stop="onDeleteApproved(r.id)">🗑 Delete</button>
         </template>
       </div>
@@ -170,7 +170,7 @@
               <div v-if="editing.__coordError" class="coord-error">{{ editing.__coordError }}</div>
             </div>
 
-            <div class="field field-span" v-if="isAdmin">
+            <div class="field field-span" v-if="isMapmasterOrHigher">
               <label class="lbl">Pin Color</label>
               <select v-model="editing.icon_color_edit" :disabled="!editMode">
                 <option v-for="opt in editingColorOptions" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
@@ -206,7 +206,7 @@ import { formatDateOnly } from '@/shared/lib/date'
 import { formatCoords } from '@/shared/lib/coords'
 
 const ctx = inject(REPORTS_CTX)
-const { isAdmin } = ctx
+const { isMapmasterOrHigher } = ctx
 const { selected, activeTab, isOwner } = ctx.feed
 const {
   editing, editMode, editDirty, submitting, enterEdit, resetEditForm, cancelEdit,

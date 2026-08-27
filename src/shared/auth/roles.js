@@ -6,7 +6,7 @@ export function normalizeRole(rawRole) {
   return 'user'
 }
 
-export function isModeratorRole(rawRole) {
+export function isMapmasterOrHigherRole(rawRole) {
   const role = normalizeRole(rawRole)
   return role === 'mapmaster' || role === 'admin'
 }
