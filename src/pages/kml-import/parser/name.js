@@ -19,17 +19,15 @@ export function parseLegacyName(name = '') {
   return { state: '', signText: stripQuotes(body), city }
 }
 
-export const SIGN_TYPES = Object.freeze(['sign', 'billboard', 'sticker', 'banner', 'graffiti', 'stationary', 'literature', 'cross', 'other'])
+export const SIGN_TYPES = Object.freeze(['sign', 'sticker', 'banner', 'graffiti', 'stationary', 'literature', 'cross', 'other'])
 
 const hasAny = (s, words) => words.some((w) => new RegExp(`\\b${w}\\b`, 'i').test(String(s || '')))
 
 /**
- * Sign type from name + description keywords (precedence as the legacy importer),
- * with the Billboards layer forcing `billboard`.
+ * Sign type from name + description keywords (precedence as the legacy importer).
  */
 export function inferSignType({ name = '', description = '', layerSignType = null } = {}) {
   if (layerSignType) return layerSignType
-  if (hasAny(name, ['billboard']) || hasAny(description, ['billboard'])) return 'billboard'
   if (hasAny(name, ['sticker', 'stickers']) || hasAny(description, ['sticker', 'stickers', 'barnacle'])) return 'sticker'
   if (hasAny(name, ['banner']) || hasAny(description, ['banner'])) return 'banner'
   if (hasAny(name, ['graffiti', 'grafitti', 'paint', 'painted']) || hasAny(description, ['graffiti', 'grafitti', 'paint', 'painted'])) return 'graffiti'

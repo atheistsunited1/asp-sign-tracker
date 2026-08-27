@@ -20,19 +20,18 @@ export function useLegend(ctx) {
 
   // --- promise timeout helper (fallback after wake-from-idle) ---
 
-  // ✅ Page legend rows — order mirrors marker draw priority (front to back)
+  // Page legend rows (display order per issue #49).
   const legendRows = [
     { key: 'reported',     label: 'Sightings' },
-    { key: 'billboards',   label: 'Billboards' },
-    { key: 'questionable', label: 'Questionable Legality' },
     { key: 'plundered',    label: 'Plundered' },
     { key: 'krakened',     label: 'Krakened' },
+    { key: 'questionable', label: 'Questionable Legality' },
   ]
 
   // reactive counts object
   const counts = ref({
-    approved: { reported: 0, billboards: 0, plundered: 0, krakened: 0, questionable: 0 },
-    pending:  { reported: 0, billboards: 0, plundered: 0, krakened: 0, questionable: 0 },
+    approved: { reported: 0, plundered: 0, krakened: 0, questionable: 0 },
+    pending:  { reported: 0, plundered: 0, krakened: 0, questionable: 0 },
   })
 
   function legendKeyForIconType(iconType) {
@@ -46,7 +45,7 @@ export function useLegend(ctx) {
   }
 
   function legendKeyForCategoryValue(v) {
-    return v === ctx.CATEGORY_BILLBOARD ? 'billboards' : legendKeyForIconType(v)
+    return legendKeyForIconType(v)
   }
 
   function legendKeyForReportType(reportType='') {
@@ -66,8 +65,8 @@ export function useLegend(ctx) {
     }
 
     // reset
-    counts.value.approved = { reported:0, billboards:0, plundered:0, krakened:0, questionable:0 }
-    counts.value.pending  = { reported:0, billboards:0, plundered:0, krakened:0, questionable:0 }
+    counts.value.approved = { reported:0, plundered:0, krakened:0, questionable:0 }
+    counts.value.pending  = { reported:0, plundered:0, krakened:0, questionable:0 }
 
     let availableApproved = 0
     let availablePending  = 0
@@ -137,7 +136,6 @@ export function useLegend(ctx) {
   function iconTypeForLegendKey(key) {
     switch (key) {
       case 'reported':     return ctx.ICON_TYPES.REPORTED_SIGNS
-      case 'billboards':   return ctx.CATEGORY_BILLBOARD
       case 'plundered':    return ctx.ICON_TYPES.PLUNDERED
       case 'krakened':     return ctx.ICON_TYPES.KRAKENED
       case 'questionable': return ctx.ICON_TYPES.SIGHTINGS_QUESTIONABLE

@@ -35,9 +35,9 @@ logged record is always an Activity ("activity type", "activity history",
 "deleted activities").
 
 **Treasure in waiting** (dashboard):
-The backlog of signs still up: pins whose state is Sighting, excluding
-Billboards (the quarterly report's "treasure in waiting"). Its period change is
-new signs minus plunders minus krakenings.
+The backlog of signs still up: pins whose state is Sighting (the quarterly
+report's "treasure in waiting"). Its period change is new signs minus plunders
+minus krakenings.
 _Avoid_: backlog (in UI copy), reported signs
 
 **Description** (`pins.description`):
@@ -59,9 +59,7 @@ handled as Questionable Legality.
 
 **Krakened** (`krakened`):
 A sign reported as no longer present for an unknown reason — no one has claimed
-the removal (unknown actor, weather, acts of god). Special case: a billboard
-whose advertisement is replaced is krakened, even though the cause is obvious,
-because the advertiser does not report the removal.
+the removal (unknown actor, weather, acts of god).
 
 **Questionable Legality** (`questionable`):
 A sign that may violate a local code or ordinance but sits on private property
@@ -75,13 +73,9 @@ regions. There is no sign-count threshold; it is a judgment about the
 distributor's pattern. Non-major pins are simply everything else, not
 necessarily one-offs. Major-campaign pins render in their own colors.
 
-**Billboard**:
-A legally placed advertisement, tracked since the major-campaign distributor
-extended their campaign to billboards. Billboards are never plundered and never
-Questionable Legality; when the advertisement is replaced, the pin is krakened.
 
 **Sign type** (`sign_type`):
-What the physical item is: sign, billboard, sticker, banner, graffiti, pamphlet,
+What the physical item is: sign, sticker, banner, graffiti, pamphlet,
 cross, other — plus `literature` (produced only by the KML importer; not offered
 in the report-form select).
 

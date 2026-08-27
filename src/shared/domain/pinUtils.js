@@ -15,7 +15,6 @@ export function formatSignTypeLabel(signType, fallback = '') {
   const normalized = raw.toLowerCase()
   const labels = {
     sign: 'Sign',
-    billboard: 'Billboard',
     sticker: 'Sticker',
     banner: 'Banner',
     graffiti: 'Graffiti',

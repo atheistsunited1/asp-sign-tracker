@@ -11,7 +11,6 @@ export const DEFAULT_COLOR_BY_KEY = Object.freeze({
   plundered: '#000000',
   krakened: '#1A237E',
   questionable: '#F57C00',
-  billboard: '#0288D1',
 })
 
 export const ALLOWED_COLORS_BY_KEY = Object.freeze({
@@ -20,7 +19,6 @@ export const ALLOWED_COLORS_BY_KEY = Object.freeze({
   plundered: ['#000000', '#424242', '#757575'],
   krakened: ['#1A237E', '#3949AB'],
   questionable: ['#F57C00'],
-  billboard: ['#0288D1'],
 })
 
 export const COLOR_LABELS = Object.freeze({
@@ -34,12 +32,10 @@ export const COLOR_LABELS = Object.freeze({
   '#1A237E': 'Navy',
   '#3949AB': 'Royal Blue',
   '#F57C00': 'Burnt Orange',
-  '#0288D1': 'Billboard Blue',
 })
 
 export const SIGN_TYPES = Object.freeze([
   'sign',
-  'billboard',
   'sticker',
   'banner',
   'graffiti',
@@ -58,7 +54,6 @@ const ICON_TYPES_TO_REPORT = Object.freeze({
 export function normalizeSignType(input = '') {
   const v = String(input || '').trim().toLowerCase()
   if (!v) return ''
-  if (v === 'billboards') return 'billboard'
   if (SIGN_TYPES.includes(v)) return v
   return 'other'
 }
@@ -88,23 +83,19 @@ function colorKeyForPin({ iconType, isMajorCampaign = false, signType = '' } = {
   if (iconType === ICON_TYPES.PLUNDERED) return 'plundered'
   if (iconType === ICON_TYPES.KRAKENED) return 'krakened'
   if (iconType === ICON_TYPES.SIGHTINGS_QUESTIONABLE) return 'questionable'
-  // Major campaign outranks billboard: a major-campaign billboard renders
-  // campaign yellow — the color says campaign, the marker shape says billboard.
   if (isMajorCampaign) return 'reported_major'
-  if (normalizeSignType(signType) === 'billboard') return 'billboard'
   return 'reported_non_major'
 }
 
 // Draw order when markers overlap, back-most (0) → front-most:
-// krakened, plundered, questionable, billboards, reported.
-export const DRAW_PRIORITY_LEVELS = 5
+// krakened, plundered, questionable, reported.
+export const DRAW_PRIORITY_LEVELS = 4
 
-export function drawPriorityForPin({ iconType, signType = '' } = {}) {
+export function drawPriorityForPin({ iconType } = {}) {
   if (iconType === ICON_TYPES.KRAKENED) return 0
   if (iconType === ICON_TYPES.PLUNDERED) return 1
   if (iconType === ICON_TYPES.SIGHTINGS_QUESTIONABLE) return 2
-  if (normalizeSignType(signType) === 'billboard') return 3
-  return 4
+  return 3
 }
 
 export function defaultColorForPin({ iconType, isMajorCampaign = false, signType = '' } = {}) {
