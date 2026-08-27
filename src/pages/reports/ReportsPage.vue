@@ -23,7 +23,7 @@
               Pending <span v-if="submittedTotal !== null" class="muted count">({{ submittedTotal }})</span>
             </button>
             <button class="tab" role="tab" :aria-selected="activeTab==='approved'" :class="{ active: activeTab==='approved' }" @click="switchTab('approved')">Approved</button>
-            <button v-if="isAdmin" class="tab" role="tab" :aria-selected="activeTab==='deleted'" :class="{ active: activeTab==='deleted' }" @click="switchTab('deleted')">Deleted</button>
+            <button v-if="isMapmasterOrHigher" class="tab" role="tab" :aria-selected="activeTab==='deleted'" :class="{ active: activeTab==='deleted' }" @click="switchTab('deleted')">Deleted</button>
             <span class="tabs-spacer"></span>
             <button class="tab-icon mobile-only" type="button" :class="{ active: hasActiveFilters }" @click="openFilters()" title="Filters" aria-label="Filters">🔍<span v-if="hasActiveFilters" class="dot" aria-hidden="true"></span></button>
             <button v-if="isMobile && (selected || selectedDeleted)" class="tab-icon mobile-only" type="button" @click="collapseList" title="Hide the list" aria-label="Hide the list">▾</button>
@@ -61,7 +61,7 @@
         </div>
 
         <!-- Deleted pins (mapmaster+) -->
-        <div v-if="isAdmin" class="list-scroll" v-show="activeTab==='deleted' && (!isMobile || listExpanded)" ref="deletedListEl" @scroll.passive="onListScroll('deleted')">
+        <div v-if="isMapmasterOrHigher" class="list-scroll" v-show="activeTab==='deleted' && (!isMobile || listExpanded)" ref="deletedListEl" @scroll.passive="onListScroll('deleted')">
           <ReportListItem
             v-for="p in deletedPins" :key="p.id"
             type="deleted" placeholder="🗂" :major="p.is_major_campaign"
@@ -115,14 +115,14 @@ import FiltersModal from '@/pages/reports/components/FiltersModal.vue'
 const { show: showToast } = useToast()
 const { confirm } = useConfirm()
 const user = inject('user')
-const isAdmin = inject('canModerate', ref(false))   // mapmaster + admin
+const isMapmasterOrHigher = inject('isMapmasterOrHigher', ref(false))   // mapmaster + admin
 
 // --- composition (order follows the dependency direction) ---------------------
 const filtersApi = useReportFilters({ onChange: () => feed.reloadForCurrentTab() })
 const { filters, draftFilters, filtersOpen, hasActiveFilters, openFilters, closeFilters, applyFilters, resetAllFilters } = filtersApi
 
 const deleted = useDeletedPins({
-  isAdmin,
+  isMapmasterOrHigher,
   actorId: () => user?.value?.id || null,
   getFilters: () => ({ q: filters.q, city: filters.city, state: filters.state }),
   pageSize: PAGE,
@@ -134,7 +134,7 @@ const deleted = useDeletedPins({
 })
 
 const feed = useReportsFeed({
-  user, isAdmin, filters, deleted,
+  user, isMapmasterOrHigher, filters, deleted,
   onSelected: (r) => {
     actions.primeLatestFinal(r)
     detail.loadEditingFrom(r)
@@ -155,12 +155,12 @@ const { deletedPins, deletedListEl, selectedDeleted, selectedDeletedId, loadingD
 const detail = useReportDetail({ selected, showToast })
 const locale = useCoordLocale({ editing: detail.editing, showToast })
 const minimap = useMiniMap({ editing: detail.editing, selected, updateCoordLocale: locale.updateCoordLocale })
-const photos = useReportPhotos({ selected, activeTab, isAdmin, isOwner: feed.isOwner, showToast, confirm })
-const actions = useReportActions({ feed, detail, isAdmin, user, showToast, confirm })
+const photos = useReportPhotos({ selected, activeTab, isMapmasterOrHigher, isOwner: feed.isOwner, showToast, confirm })
+const actions = useReportActions({ feed, detail, isMapmasterOrHigher, user, showToast, confirm })
 const { mapEl } = minimap
 const { lightbox, closeLightbox, firstThumb } = photos
 
-provide(REPORTS_CTX, { isAdmin, feed, deleted, detail, locale, minimap, photos, actions })
+provide(REPORTS_CTX, { isMapmasterOrHigher, feed, deleted, detail, locale, minimap, photos, actions })
 
 onMounted(async () => {
   minimap.initMap()

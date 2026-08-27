@@ -9,7 +9,7 @@ export const MAP_CTX = Symbol('map-ctx')
 
 export function createMapContext(page) {
   return {
-    ...page,                               // route, router, showToast, confirm, log, canModerate, supabasePins, currentUser
+    ...page,                               // route, router, showToast, confirm, log, isMapmasterOrHigher, supabasePins, currentUser
     state: {
       map: null,
       _lastPointerDownLL: null,

@@ -12,7 +12,7 @@ import { logger } from '@/shared/lib/logger'
 
 /**
  * @param {object} deps
- * @param {Ref<boolean>} deps.isAdmin        mapmaster/admin gate
+ * @param {Ref<boolean>} deps.isMapmasterOrHigher        mapmaster/admin gate
  * @param {() => string|null} deps.actorId   current user id
  * @param {() => object} deps.getFilters     { q, city, state, deletedFrom?, deletedTo? }
  * @param {number} deps.pageSize
@@ -20,7 +20,7 @@ import { logger } from '@/shared/lib/logger'
  * @param {Function} deps.confirm
  * @param {{ onSelect?: (pin) => void, afterMutation?: () => Promise<void> }} [deps.hooks]
  */
-export function useDeletedPins({ isAdmin, actorId, getFilters, pageSize = 100, showToast, confirm, hooks = {} }) {
+export function useDeletedPins({ isMapmasterOrHigher, actorId, getFilters, pageSize = 100, showToast, confirm, hooks = {} }) {
   const deletedPins = ref([])
   const deletedTotal = ref(null)
   const deletedOffset = ref(0)
@@ -44,7 +44,7 @@ export function useDeletedPins({ isAdmin, actorId, getFilters, pageSize = 100, s
    * a reset keeps the selected pin if it is still in the fresh list.
    */
   async function loadDeletedPage(reset = false, { keepSelection = false } = {}) {
-    if (!isAdmin.value) return
+    if (!isMapmasterOrHigher.value) return
     const keepId = keepSelection ? selectedDeleted.value?.id : null
     if (reset) {
       deletedPins.value = []
@@ -107,7 +107,7 @@ export function useDeletedPins({ isAdmin, actorId, getFilters, pageSize = 100, s
   /** Restore the pin with all of its restorable (non-audit) activity, as approved. */
   async function restoreSelectedDeleted() {
     const pin = selectedDeleted.value
-    if (!pin || !isAdmin.value) return
+    if (!pin || !isMapmasterOrHigher.value) return
     const actor = actorId()
     if (!actor) { showToast('Session missing. Please sign in again.', 'error'); return }
 
@@ -143,7 +143,7 @@ export function useDeletedPins({ isAdmin, actorId, getFilters, pageSize = 100, s
   /** Hard-delete the pin, its activity and photos. */
   async function purgeSelectedDeleted() {
     const pin = selectedDeleted.value
-    if (!pin || !isAdmin.value) return
+    if (!pin || !isMapmasterOrHigher.value) return
     const ok = await confirm({
       title: 'Permanently delete this pin?',
       message: `Pin ${pin.friendly_id}, all of its activity and photos will be erased. This cannot be undone.`,

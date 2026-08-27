@@ -25,7 +25,7 @@ export function usePinDrag(ctx) {
   const S = ctx.state
 
   function togglePinDrag(pinId) {
-    if (!ctx.canModerate.value) {
+    if (!ctx.isMapmasterOrHigher.value) {
       ctx.showToast('Mapmaster or admin only.', 'error')
       return
     }
@@ -126,7 +126,7 @@ export function usePinDrag(ctx) {
   }
 
   async function saveDraggedPin (pinId) {
-    if (!ctx.canModerate.value) {
+    if (!ctx.isMapmasterOrHigher.value) {
       ctx.showToast('Mapmaster or admin only.', 'error')
       return
     }

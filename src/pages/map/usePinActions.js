@@ -136,7 +136,7 @@ export function usePinActions(ctx) {
   };
 
   async function deletePinFromMapPopup(pinId) {
-    if (!ctx.canModerate.value) {
+    if (!ctx.isMapmasterOrHigher.value) {
       ctx.showToast('Mapmaster or admin only.', 'error')
       return
     }
@@ -231,7 +231,7 @@ export function usePinActions(ctx) {
   };
 
   function startEditPinDesc (pinId) {
-    if (!ctx.canModerate.value) { ctx.showToast('Mapmaster or admin only.', 'error'); return }
+    if (!ctx.isMapmasterOrHigher.value) { ctx.showToast('Mapmaster or admin only.', 'error'); return }
     editingDescMap.set(pinId, true)
     ctx.updatePinPopup(pinId)
   };
@@ -242,7 +242,7 @@ export function usePinActions(ctx) {
   };
 
   async function savePinDesc (pinId, nextDesc = null) {
-    if (!ctx.canModerate.value) { ctx.showToast('Mapmaster or admin only.', 'error'); return }
+    if (!ctx.isMapmasterOrHigher.value) { ctx.showToast('Mapmaster or admin only.', 'error'); return }
     let newDesc = ''
     if (typeof nextDesc === 'string') {
       newDesc = nextDesc.trim()
@@ -289,7 +289,7 @@ export function usePinActions(ctx) {
   };
 
   async function savePinVisuals(pinId, payload = {}) {
-    if (!ctx.canModerate.value) {
+    if (!ctx.isMapmasterOrHigher.value) {
       ctx.showToast('Mapmaster or admin only.', 'error')
       return
     }

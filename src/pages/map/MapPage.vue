@@ -169,13 +169,13 @@ const { confirm } = useConfirm()
 
 const log = scope('Map')
 
-const canModerate = inject('canModerate', ref(false))
+const isMapmasterOrHigher = inject('isMapmasterOrHigher', ref(false))
 
 const supabasePins = inject('supabasePins')
 const currentUser = inject('user')
 
 
-const ctx = createMapContext({ route, router, showToast, confirm, log, canModerate, supabasePins, currentUser })
+const ctx = createMapContext({ route, router, showToast, confirm, log, isMapmasterOrHigher, supabasePins, currentUser })
 usePinFilters(ctx)
 useMyReportsAndBookmarks(ctx)
 useLegend(ctx)
