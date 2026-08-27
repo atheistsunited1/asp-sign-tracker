@@ -20,13 +20,13 @@ export function useLegend(ctx) {
 
   // --- promise timeout helper (fallback after wake-from-idle) ---
 
-  // ✅ Page legend rows — order mirrors marker draw priority (front to back)
+  // Page legend rows (display order per issue #49). Billboards is intentionally
+  // omitted — that legacy layer is not migrated.
   const legendRows = [
     { key: 'reported',     label: 'Sightings' },
-    { key: 'billboards',   label: 'Billboards' },
-    { key: 'questionable', label: 'Questionable Legality' },
     { key: 'plundered',    label: 'Plundered' },
     { key: 'krakened',     label: 'Krakened' },
+    { key: 'questionable', label: 'Questionable Legality' },
   ]
 
   // reactive counts object
