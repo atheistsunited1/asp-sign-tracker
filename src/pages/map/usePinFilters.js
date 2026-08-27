@@ -9,7 +9,6 @@ import {
   DRAW_PRIORITY_LEVELS,
   drawPriorityForPin,
   normalizeIconColorForPin,
-  normalizeSignType,
 } from '@/shared/domain/pinVisuals'
 
 export function usePinFilters(ctx) {
@@ -20,7 +19,6 @@ export function usePinFilters(ctx) {
 
   const LS_KEYS = {
     activeCategories: 'map.activeCategories',
-    billboardCategoryMigrated: 'map.billboardCategoryMigrated',
     legendOpen: 'map.legendOpen',
     locateFollowHintShown: 'map.locateFollowHintShown',
     myReportsOnly: 'map.myReportsOnly',
@@ -49,15 +47,8 @@ export function usePinFilters(ctx) {
     SIGHTINGS_QUESTIONABLE: 3,
   }
 
-  // Billboards are a legend category of their own even though they are a
-  // sign_type: a reported billboard belongs to the Billboards bucket; once its
-  // icon_type changes (e.g. krakened after the ad is replaced) it moves to that
-  // category like any other pin. Category values are icon_type numbers plus
-  // this sentinel string.
-  const CATEGORY_BILLBOARD = 'billboard'
-
-  // Default: Sightings and Billboards ON
-  const activeCategories = ref(new Set([ ICON_TYPES.REPORTED_SIGNS, CATEGORY_BILLBOARD ]))
+  // Default: Sightings ON. Category values are icon_type numbers.
+  const activeCategories = ref(new Set([ ICON_TYPES.REPORTED_SIGNS ]))
 
   const noPinsWarning = ref(false)
 
@@ -124,10 +115,6 @@ export function usePinFilters(ctx) {
     return v === true || v === 1 || v === '1' || v === 'true'
   }
 
-  function isBillboardSignType(t = '') {
-    return normalizeSignType(t) === 'billboard'
-  }
-
   // persist in localStorage (optional, consistent with other toggles)
   try {
     const saved = localStorage.getItem('map.myReportsOnly')
@@ -187,15 +174,8 @@ export function usePinFilters(ctx) {
   try {
     const savedCats = JSON.parse(localStorage.getItem(LS_KEYS.activeCategories) || 'null')
     if (Array.isArray(savedCats)) {
-      const restored = new Set(savedCats)
-      // Saves that predate the Billboards category can't contain its sentinel —
-      // default the new row ON once instead of leaving it silently hidden.
-      if (!localStorage.getItem(LS_KEYS.billboardCategoryMigrated)) {
-        restored.add(CATEGORY_BILLBOARD)
-      }
-      activeCategories.value = restored
+      activeCategories.value = new Set(savedCats)
     }
-    localStorage.setItem(LS_KEYS.billboardCategoryMigrated, '1')
   } catch {/* ignore parse errors */}
 
   // helper to toggle a category id
@@ -207,6 +187,6 @@ export function usePinFilters(ctx) {
     ctx.redrawPins(S.map, { filtersChanged: true }) // re-apply filters immediately
   }
 
-  Object.assign(ctx, { CATEGORY_BILLBOARD, ICON_TYPES, LS_KEYS, US_STATE_CODES, activeCategories, bookmarkedOnly, hasActiveTrayFilters, inferredCountryForPin, isBillboardSignType, isMajorCampaign, legendOpen, majorCampaignOnly, myReportsOnly, noPinsAreaBanner, noPinsWarning, normalizeCats, normalizeFilterText, pinFilterCity, pinFilterCountry, pinFilterState, resetAllLocalFilters, toggleCategory })
-  return { CATEGORY_BILLBOARD, ICON_TYPES, LS_KEYS, US_STATE_CODES, activeCategories, bookmarkedOnly, hasActiveTrayFilters, inferredCountryForPin, isBillboardSignType, isMajorCampaign, legendOpen, majorCampaignOnly, myReportsOnly, noPinsAreaBanner, noPinsWarning, normalizeCats, normalizeFilterText, pinFilterCity, pinFilterCountry, pinFilterState, resetAllLocalFilters, toggleCategory }
+  Object.assign(ctx, { ICON_TYPES, LS_KEYS, US_STATE_CODES, activeCategories, bookmarkedOnly, hasActiveTrayFilters, inferredCountryForPin, isMajorCampaign, legendOpen, majorCampaignOnly, myReportsOnly, noPinsAreaBanner, noPinsWarning, normalizeCats, normalizeFilterText, pinFilterCity, pinFilterCountry, pinFilterState, resetAllLocalFilters, toggleCategory })
+  return { ICON_TYPES, LS_KEYS, US_STATE_CODES, activeCategories, bookmarkedOnly, hasActiveTrayFilters, inferredCountryForPin, isMajorCampaign, legendOpen, majorCampaignOnly, myReportsOnly, noPinsAreaBanner, noPinsWarning, normalizeCats, normalizeFilterText, pinFilterCity, pinFilterCountry, pinFilterState, resetAllLocalFilters, toggleCategory }
 }

@@ -8,7 +8,6 @@ import { MAX_PLACEMARKS_PER_FILE } from '@/pages/export/constants.js'
 
 export const BUCKET_STYLES = Object.freeze({
   sighting:     { id: 'icon-1670-0288D1', color: 'ffd18802', label: 'Sighting (still up)' },
-  billboard:    { id: 'icon-1653-F9A825', color: 'ff25a8f9', label: 'Billboard' },
   plundered:    { id: 'icon-1881-0F9D58', color: 'ff589d0f', label: 'Plundered' },
   krakened:     { id: 'icon-1819-7CB342', color: 'ff42b37c', label: 'Krakened' },
   questionable: { id: 'icon-1594-9C27B0', color: 'ffb0279c', label: 'Questionable legality' },

@@ -4,7 +4,6 @@ export const BUCKETS = Object.freeze([
   { value: 'plundered',    label: 'Plundered' },
   { value: 'krakened',     label: 'Krakened' },
   { value: 'questionable', label: 'Questionable legality' },
-  { value: 'billboard',    label: 'Billboards' },
 ])
 
 export const MAJOR_OPTIONS = Object.freeze([

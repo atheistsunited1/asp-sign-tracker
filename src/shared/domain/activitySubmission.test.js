@@ -15,7 +15,7 @@ describe('isPendingPin', () => {
 
 describe('deriveSubmissionVisuals', () => {
   it('takes the major-campaign flag and fallback sign type from the existing pin', () => {
-    const v = deriveSubmissionVisuals({ reportType: 'sighting', signType: '', existingPin: { is_major_campaign: true, sign_type: 'billboard' } })
+    const v = deriveSubmissionVisuals({ reportType: 'sighting', signType: '', existingPin: { is_major_campaign: true, sign_type: 'sticker' } })
     expect(v.isMajor).toBe(true)
     expect(v.iconType).toBeDefined()
     expect(typeof v.iconColor).toBe('string')

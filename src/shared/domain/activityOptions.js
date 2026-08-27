@@ -7,7 +7,6 @@ export const ACTIVITY_TYPE_OPTIONS = Object.freeze([
 ])
 export const SIGN_TYPE_OPTIONS = Object.freeze([
   { v: 'sign', l: 'Sign' },
-  { v: 'billboard', l: 'Billboard' },
   { v: 'sticker', l: 'Sticker' },
   { v: 'banner', l: 'Banner' },
   { v: 'graffiti', l: 'Graffiti' },

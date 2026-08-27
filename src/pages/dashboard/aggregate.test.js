@@ -12,20 +12,19 @@ const stats = {
     { bucket: 'sighting', is_major_campaign: true, campaign: 'js', state: 'NC', n: 20 },
     { bucket: 'sighting', is_major_campaign: false, campaign: null, state: 'CA', n: 5 },
     { bucket: 'sighting', is_major_campaign: false, campaign: null, state: 'AR', n: 7 },
-    { bucket: 'billboard', is_major_campaign: false, campaign: null, state: 'NC', n: 3 },
     { bucket: 'questionable', is_major_campaign: false, campaign: null, state: 'OK', n: 4 },
   ],
   activity: [
     { window: P, report_type: 'tracked_total', n: 209 }, { window: V, report_type: 'tracked_total', n: 190 },
-    { window: P, report_type: 'first_sighting', is_major_campaign: true, campaign: 'jicr', state: 'GA', is_billboard: false, n: 12 },
-    { window: P, report_type: 'first_sighting', is_major_campaign: false, campaign: null, state: 'CA', is_billboard: false, n: 7 },
-    { window: V, report_type: 'first_sighting', is_major_campaign: false, campaign: null, state: 'CA', is_billboard: false, n: 30 },
-    { window: P, report_type: 'plundered', is_major_campaign: true, campaign: 'jicr', state: 'GA', is_billboard: false, n: 10 },
-    { window: P, report_type: 'plundered', is_major_campaign: true, campaign: 'js', state: 'NC', is_billboard: false, n: 2 },
-    { window: P, report_type: 'plundered', is_major_campaign: false, campaign: null, state: 'CA', is_billboard: false, n: 3 },
-    { window: V, report_type: 'plundered', is_major_campaign: true, campaign: 'jicr', state: 'GA', is_billboard: false, n: 8 },
-    { window: P, report_type: 'krakened', is_major_campaign: false, campaign: null, state: 'CA', is_billboard: false, n: 4 },
-    { window: P, report_type: 'sighting', is_major_campaign: false, campaign: null, state: 'CA', is_billboard: false, n: 9 },
+    { window: P, report_type: 'first_sighting', is_major_campaign: true, campaign: 'jicr', state: 'GA', n: 12 },
+    { window: P, report_type: 'first_sighting', is_major_campaign: false, campaign: null, state: 'CA', n: 7 },
+    { window: V, report_type: 'first_sighting', is_major_campaign: false, campaign: null, state: 'CA', n: 30 },
+    { window: P, report_type: 'plundered', is_major_campaign: true, campaign: 'jicr', state: 'GA', n: 10 },
+    { window: P, report_type: 'plundered', is_major_campaign: true, campaign: 'js', state: 'NC', n: 2 },
+    { window: P, report_type: 'plundered', is_major_campaign: false, campaign: null, state: 'CA', n: 3 },
+    { window: V, report_type: 'plundered', is_major_campaign: true, campaign: 'jicr', state: 'GA', n: 8 },
+    { window: P, report_type: 'krakened', is_major_campaign: false, campaign: null, state: 'CA', n: 4 },
+    { window: P, report_type: 'sighting', is_major_campaign: false, campaign: null, state: 'CA', n: 9 },
   ],
   trend: [
     { quarter: '2025-Q4', report_type: 'plundered', n: 8 }, { quarter: '2026-Q1', report_type: 'plundered', n: 15 },
@@ -61,7 +60,7 @@ describe('buildDashboardModel', () => {
     expect(m.plundered.snapshot.total).toBe(140)
     expect(m.plundered.snapshot.major).toBe(100)
   })
-  it('treasure in waiting: live backlog excludes billboards; period change = new − plundered − krakened', () => {
+  it('treasure in waiting: period change = new − plundered − krakened', () => {
     expect(m.backlog.snapshot.total).toBe(32)
     expect(m.backlog.snapshot.major).toBe(20)
     expect(m.backlog.snapshot.caNonMajor).toBe(5)
@@ -72,10 +71,9 @@ describe('buildDashboardModel', () => {
     expect(m.backlog.caNonMajor).toBe(7 - 3 - 4)
     expect(m.backlog.previous).toBe(30 - 8)
   })
-  it('questionable and billboards', () => {
+  it('questionable', () => {
     expect(m.questionable.snapshot.total).toBe(4)
     expect(m.questionable.period).toBe(0)
-    expect(m.billboards.total).toBe(3)
   })
   it('trend series align to sorted quarters with zeros filled', () => {
     expect(m.trend.quarters).toEqual(['2025-Q4', '2026-Q1'])

@@ -178,7 +178,7 @@
               <li><strong>Member</strong> = the profile whose initials match <code>ASP (XX)</code> on that line; the pin is credited to its first attributed activity. Unknown initials import without a member (listed in the summary).</li>
               <li><em>Recidivist / repeat offender / previously … / a similar sign …</em> notes stay in the description and never create activities.</li>
               <li>An activity with no date of its own gets the pin's latest date; a pin with <strong>no date at all</strong> needs a decision. More than {{ MAX_FLAGS }} of those and the file is refused.</li>
-              <li><strong>Sign type</strong> from keywords (billboard, sticker/barnacle, banner, graffiti, cross, literature, sign); the Billboards layer forces <em>billboard</em>. Photos from <code>gx_media_links</code>.</li>
+              <li><strong>Sign type</strong> from keywords (sticker/barnacle, banner, graffiti, cross, literature, sign). Photos from <code>gx_media_links</code>.</li>
             </ul>
           </details>
         </div>
