@@ -43,7 +43,7 @@ _Avoid_: backlog (in UI copy), reported signs
 **Description** (`pins.description`):
 The pin's single free-text field: how to find the sign on site (pole, corner,
 landmarks) plus anything unusual. Quick updates may append a dated line
-(`MM/DD/YY: note`); nothing edits it in place except moderators.
+(`MM/DD/YY: note`); nothing edits it in place except mapmasters/admins.
 _Avoid_: location description, notes (as a field name)
 
 **Sighting** (`sighting`):

@@ -44,7 +44,7 @@
       <div class="pp-box" style="display: flex; align-items: center; gap: 8px;">
         <div style="flex: 1 1 auto; min-width: 0;">{{ descValue || '—' }}</div>
         <button
-          v-if="canModerate && !pending"
+          v-if="isMapmasterOrHigher && !pending"
           class="pp-iconbtn"
           title="Edit location"
           @click="$emit('start-edit-desc')"
@@ -115,7 +115,7 @@
 
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
       <button
-        v-if="canModerate"
+        v-if="isMapmasterOrHigher"
         class="pp-btn-compact pp-deletebtn"
         title="Delete pending activity or pin"
         @click="$emit('delete-pin')"
@@ -144,7 +144,7 @@ const props = defineProps({
   photosId: { type: String, required: true },
   isEditing: { type: Boolean, default: false },
   descValue: { type: String, default: '' },
-  canModerate: { type: Boolean, default: false },
+  isMapmasterOrHigher: { type: Boolean, default: false },
   canBookmark: { type: Boolean, default: true },
   isBookmarked: { type: Boolean, default: false },
   canStylePin: { type: Boolean, default: false },

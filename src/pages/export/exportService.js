@@ -1,7 +1,7 @@
 import { supabase } from '@/shared/data/supabase'
 
 /**
- * export_pins(...) — moderator-gated export dataset (DB patch 000007):
+ * export_pins(...) — mapmaster/admin-gated export dataset (DB patch 000007):
  * `[{ pin, activities[], photos[] }]` for approved pins matching the filters.
  */
 export async function fetchExportPins({ buckets = null, major = 'all', state = null, from = null, to = null } = {}) {

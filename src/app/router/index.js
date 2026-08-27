@@ -9,7 +9,7 @@ import DeletedPins from '@/pages/deleted-pins/DeletedPinsPage.vue'
 const Dashboard = () => import('@/pages/dashboard/DashboardPage.vue')   // lazy: ECharts only loads for the dashboard
 const Export = () => import('@/pages/export/ExportPage.vue')
 import { fetchProfileAccessByUserId, getSession as getAuthSession } from '@/shared/auth/authService'
-import { isModeratorRole, isAdminRole } from '@/shared/auth/roles'
+import { isMapmasterOrHigherRole, isAdminRole } from '@/shared/auth/roles'
 
 const routes = [
   { path: '/', name: 'home', component: Map },
@@ -48,7 +48,7 @@ router.beforeEach(async (to) => {
 
   // --- 3) Role gates
   if (requiresMapmaster) {
-    if (!isModeratorRole(role)) {
+    if (!isMapmasterOrHigherRole(role)) {
       return { path: '/', replace: true }
     }
   }

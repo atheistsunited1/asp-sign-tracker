@@ -11,9 +11,9 @@ import { fetchPhotoRowsByReportId, deletePhotoById } from '@/pages/reports/repor
 export const MAX_PHOTOS = 5
 
 /**
- * @param {{ selected: Ref, activeTab: Ref, isAdmin: Ref, isOwner: Ref, showToast: Function, confirm: Function }} deps
+ * @param {{ selected: Ref, activeTab: Ref, isMapmasterOrHigher: Ref, isOwner: Ref, showToast: Function, confirm: Function }} deps
  */
-export function useReportPhotos({ selected, activeTab, isAdmin, isOwner, showToast, confirm }) {
+export function useReportPhotos({ selected, activeTab, isMapmasterOrHigher, isOwner, showToast, confirm }) {
   const submissionPhotos = reactive({})   // { [reportId]: Array<{id,image_url}> }
   const uploadingPhotos = ref(false)
   const uploadProgress = reactive({ done: 0, total: 0 })
@@ -22,13 +22,13 @@ export function useReportPhotos({ selected, activeTab, isAdmin, isOwner, showToa
   // photo perms (Approved = admin-only)
   const canAddPhotos = computed(() => {
     if (!selected.value) return false
-    if (activeTab.value === 'approved') return isAdmin.value
-    return isAdmin.value || isOwner.value
+    if (activeTab.value === 'approved') return isMapmasterOrHigher.value
+    return isMapmasterOrHigher.value || isOwner.value
   })
   const canDeletePhotos = computed(() => {
     if (!selected.value) return false
-    if (activeTab.value === 'approved') return isAdmin.value
-    return isAdmin.value || isOwner.value
+    if (activeTab.value === 'approved') return isMapmasterOrHigher.value
+    return isMapmasterOrHigher.value || isOwner.value
   })
 
   function openLightbox(url) { lightbox.open = true; lightbox.url = url }
