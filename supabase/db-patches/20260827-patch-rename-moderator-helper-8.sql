@@ -4,27 +4,32 @@
 -- Target version:   8
 --
 -- Purpose: terminology discipline (behaviour-neutral). The capability
--- "mapmaster or admin" was named `is_moderator()`, an over-broad label. In the
--- strict role hierarchy (member < mapmaster < admin) the clear name is the
--- minimum-role threshold: `is_mapmaster_or_higher()`. This patch:
---   * adds `is_mapmaster_or_higher()` with the exact body of `is_moderator()`;
---   * redefines `is_moderator()` as a thin DEPRECATED wrapper over it, so any
---     un-migrated caller keeps working for one cycle (no mid-deploy breakage);
---   * rewrites the cheap one-line policies + `can_write_sign_photo` to call the
---     clear name directly.
+-- "mapmaster or admin" was named `is_moderator()` and its policies
+-- `<table>_moderator_<op>` — an over-broad label. In the strict role hierarchy
+-- (member < mapmaster < admin) the clear name is the minimum-role threshold:
+-- `is_mapmaster_or_higher()`, and the policies become `<table>_mapmaster_<op>`,
+-- parallel to the existing `<table>_member_<op>` policies. (Plain
+-- `<table>_<op>` is impossible: each table carries BOTH a member-tier and a
+-- mapmaster-tier policy per operation, with different predicates.)
 --
--- Deliberately NOT rewritten here: `dashboard_stats` (131 lines) and
--- `export_pins` (74 lines) keep calling `is_moderator()` (the wrapper) — exact,
--- so they are behaviour-identical, and reproducing their large bodies just to
--- swap one word would add transcription risk right before launch. They migrate
--- to the clear name at their next real edit; the deprecated wrapper covers them
--- until then.
+-- This patch:
+--   * adds `is_mapmaster_or_higher()` (exact body of `is_moderator()`);
+--   * keeps `is_moderator()` as a thin DEPRECATED wrapper one cycle so any
+--     un-migrated caller still works;
+--   * renames each `<table>_moderator_<op>` policy to `<table>_mapmaster_<op>`
+--     and points it at the clear helper — predicate byte-identical;
+--   * updates the `sign-photos` read policy and `can_write_sign_photo`.
 --
--- Every predicate below is byte-identical to the current one except the helper
--- name, so this patch is behaviour-neutral (proven by the local RLS matrix).
+-- NOT rewritten here: `dashboard_stats` (131 lines) and `export_pins` (74) keep
+-- calling `is_moderator()` (the exact wrapper) — behaviour-identical, and
+-- reproducing their large bodies just to swap one word would add transcription
+-- risk right before launch. They migrate at their next real edit.
 --
--- Idempotency: create-or-replace + drop/recreate policy. Rerunning at version 8
--- with this patch ID re-applies identically.
+-- Every predicate is byte-identical except the helper name; only policy NAMES
+-- change (internal identifiers, no app/external references). Behaviour-neutral,
+-- proven by the local RLS matrix.
+--
+-- Idempotency: create-or-replace + drop-if-exists (both old and new names).
 
 begin;
 
@@ -95,54 +100,67 @@ as $$
 $$;
 
 --------------------------------------------------------------------------------
--- 2. Rewrite the base-table policies to the clear name
---    (predicates unchanged except the helper; policy names kept — internal)
+-- 2. Rename the mapmaster-tier policies: <table>_moderator_<op> ->
+--    <table>_mapmaster_<op>, pointed at the clear helper. Predicates unchanged.
 --------------------------------------------------------------------------------
 
+-- pins
 drop policy if exists "pins_moderator_select" on public.pins;
-create policy "pins_moderator_select" on public.pins
+drop policy if exists "pins_mapmaster_select" on public.pins;
+create policy "pins_mapmaster_select" on public.pins
     for select to authenticated using (public.is_mapmaster_or_higher());
 
 drop policy if exists "pins_moderator_insert" on public.pins;
-create policy "pins_moderator_insert" on public.pins
+drop policy if exists "pins_mapmaster_insert" on public.pins;
+create policy "pins_mapmaster_insert" on public.pins
     for insert to authenticated with check (public.is_mapmaster_or_higher());
 
 drop policy if exists "pins_moderator_update" on public.pins;
-create policy "pins_moderator_update" on public.pins
+drop policy if exists "pins_mapmaster_update" on public.pins;
+create policy "pins_mapmaster_update" on public.pins
     for update to authenticated
     using (public.is_mapmaster_or_higher()) with check (public.is_mapmaster_or_higher());
 
+-- reports
 drop policy if exists "reports_moderator_select" on public.reports;
-create policy "reports_moderator_select" on public.reports
+drop policy if exists "reports_mapmaster_select" on public.reports;
+create policy "reports_mapmaster_select" on public.reports
     for select to authenticated using (public.is_mapmaster_or_higher());
 
 drop policy if exists "reports_moderator_insert" on public.reports;
-create policy "reports_moderator_insert" on public.reports
+drop policy if exists "reports_mapmaster_insert" on public.reports;
+create policy "reports_mapmaster_insert" on public.reports
     for insert to authenticated with check (public.is_mapmaster_or_higher());
 
 drop policy if exists "reports_moderator_update" on public.reports;
-create policy "reports_moderator_update" on public.reports
+drop policy if exists "reports_mapmaster_update" on public.reports;
+create policy "reports_mapmaster_update" on public.reports
     for update to authenticated
     using (public.is_mapmaster_or_higher()) with check (public.is_mapmaster_or_higher());
 
+-- photos
 drop policy if exists "photos_moderator_select" on public.photos;
-create policy "photos_moderator_select" on public.photos
+drop policy if exists "photos_mapmaster_select" on public.photos;
+create policy "photos_mapmaster_select" on public.photos
     for select to authenticated using (public.is_mapmaster_or_higher());
 
 drop policy if exists "photos_moderator_insert" on public.photos;
-create policy "photos_moderator_insert" on public.photos
+drop policy if exists "photos_mapmaster_insert" on public.photos;
+create policy "photos_mapmaster_insert" on public.photos
     for insert to authenticated with check (public.is_mapmaster_or_higher());
 
 drop policy if exists "photos_moderator_delete" on public.photos;
-create policy "photos_moderator_delete" on public.photos
+drop policy if exists "photos_mapmaster_delete" on public.photos;
+create policy "photos_mapmaster_delete" on public.photos
     for delete to authenticated using (public.is_mapmaster_or_higher());
 
 --------------------------------------------------------------------------------
--- 3. Storage: read policy (patch 4) + can_write_sign_photo (patch 6)
+-- 3. Storage: read policy (patch 4, renamed) + can_write_sign_photo (patch 6)
 --------------------------------------------------------------------------------
 
 drop policy if exists "sign-photos moderator read" on storage.objects;
-create policy "sign-photos moderator read" on storage.objects
+drop policy if exists "sign-photos mapmaster read" on storage.objects;
+create policy "sign-photos mapmaster read" on storage.objects
     for select to authenticated
     using (bucket_id = 'sign-photos' and public.is_mapmaster_or_higher());
 
@@ -172,6 +190,12 @@ grant execute on function public.can_write_sign_photo(text) to authenticated;
 --------------------------------------------------------------------------------
 
 do $$
+declare
+    v_new constant text[] := array[
+        'pins_mapmaster_select','pins_mapmaster_insert','pins_mapmaster_update',
+        'reports_mapmaster_select','reports_mapmaster_insert','reports_mapmaster_update',
+        'photos_mapmaster_select','photos_mapmaster_insert','photos_mapmaster_delete',
+        'sign-photos mapmaster read'];
 begin
     if to_regprocedure('public.is_mapmaster_or_higher()') is null then
         raise exception 'verification failed: is_mapmaster_or_higher missing';
@@ -179,17 +203,19 @@ begin
     if to_regprocedure('public.is_moderator()') is null then
         raise exception 'verification failed: is_moderator wrapper missing';
     end if;
-    -- The rewritten policies must exist and no longer reference is_moderator.
+    -- All renamed policies must exist.
+    if (select count(*) from pg_policies
+        where schemaname in ('public','storage') and policyname = any(v_new)) <> array_length(v_new, 1) then
+        raise exception 'verification failed: a renamed mapmaster policy is missing';
+    end if;
+    -- No *_moderator_* policy may remain, and none may still call is_moderator.
     if exists (
         select 1 from pg_policies
-        where schemaname in ('public', 'storage')
-          and policyname in ('pins_moderator_select','pins_moderator_insert','pins_moderator_update',
-                             'reports_moderator_select','reports_moderator_insert','reports_moderator_update',
-                             'photos_moderator_select','photos_moderator_insert','photos_moderator_delete',
-                             'sign-photos moderator read')
-          and (coalesce(qual,'') || coalesce(with_check,'')) like '%is_moderator%'
+        where schemaname in ('public','storage')
+          and (policyname like '%_moderator_%' or policyname = 'sign-photos moderator read'
+               or (coalesce(qual,'') || coalesce(with_check,'')) like '%is_moderator%')
     ) then
-        raise exception 'verification failed: a rewritten policy still calls is_moderator';
+        raise exception 'verification failed: a moderator-named policy or is_moderator call remains';
     end if;
     if pg_get_functiondef('public.can_write_sign_photo(text)'::regprocedure) like '%is_moderator%' then
         raise exception 'verification failed: can_write_sign_photo still calls is_moderator';
