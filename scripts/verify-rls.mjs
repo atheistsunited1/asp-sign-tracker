@@ -10,6 +10,7 @@
  *   node scripts/verify-rls.mjs                  # anon probes only (read-only, always safe)
  *   VERIFY_MEMBER_EMAIL=… VERIFY_MEMBER_PASSWORD=… node scripts/verify-rls.mjs
  *   VERIFY_ADMIN_EMAIL=…  VERIFY_ADMIN_PASSWORD=…  node scripts/verify-rls.mjs
+ *   VERIFY_MAPMASTER_EMAIL=.. VERIFY_MAPMASTER_PASSWORD=.. node scripts/verify-rls.mjs
  *   node scripts/verify-rls.mjs --write          # adds member write-lifecycle probes;
  *                                                # leaves one pending test pin labelled
  *                                                # "RLS-VERIFY test pin" for a moderator to deny.
@@ -197,6 +198,53 @@ async function memberProbes(email, password) {
   await client.auth.signOut()
 }
 
+async function mapmasterProbes(email, password) {
+  const actor = 'mapmaster'
+  const s = await signIn(actor, email, password)
+  if (!s) return
+  const { client, uid } = s
+
+  {
+    const { data, error } = await client.from('reports').select('id,is_deleted').limit(50)
+    record(actor, 'may read reports (moderator scope)', !error, error?.message ?? `${data?.length} row(s)`)
+  }
+  {
+    // Moderator analytics RPCs (is_moderator gated) succeed for a mapmaster.
+    const { error } = await client.rpc('dashboard_stats', { p_from: '2026-01-01', p_to: '2026-12-31' })
+    record(actor, 'may call dashboard_stats', !error, error?.code ?? error?.message ?? 'ok')
+  }
+  {
+    const { error } = await client.rpc('export_pins', {})
+    record(actor, 'may call export_pins', !error, error?.code ?? error?.message ?? 'ok')
+  }
+  {
+    // Admin-only surface: a mapmaster is a moderator but NOT an admin.
+    const { error } = await client.rpc('admin_list_profiles', { pending_only: false })
+    record(actor, 'cannot call admin_list_profiles (admin-only)', !!error, error?.code ?? 'EXECUTED')
+  }
+  {
+    const { data, error } = await client.from('profiles')
+      .update({ role: 'admin' }).eq('id', uid).select('id, role')
+    record(actor, 'cannot self-escalate to admin', denied(error, data), error?.code ?? '')
+  }
+
+  if (WRITE) {
+    // A moderator may insert AND approve a pin -- the capability a member lacks.
+    const { data: pin, error } = await client.from('pins')
+      .insert({ lat: 0.002, lng: 0.002, sign_text: 'RLS-VERIFY mapmaster pin', submitted_by: uid })
+      .select().single()
+    record(actor, 'may insert a pin', !error && !!pin, error?.message ?? '')
+    if (pin) {
+      const { data: appr, error: aerr } = await client.from('pins')
+        .update({ is_approved: true }).eq('id', pin.id).select('id, is_approved')
+      record(actor, 'may approve a pin', !aerr && appr?.[0]?.is_approved === true, aerr?.code ?? '')
+      // tidy: soft-delete the test pin so it does not linger approved on the map
+      await client.from('pins').update({ is_deleted: true, deleted_at: new Date().toISOString() }).eq('id', pin.id)
+    }
+  }
+  await client.auth.signOut()
+}
+
 async function adminProbes(email, password) {
   const actor = 'admin'
   const s = await signIn(actor, email, password)
@@ -225,6 +273,11 @@ if (env.VERIFY_MEMBER_EMAIL && env.VERIFY_MEMBER_PASSWORD) {
   await memberProbes(env.VERIFY_MEMBER_EMAIL, env.VERIFY_MEMBER_PASSWORD)
 } else {
   console.log('note: member probes skipped (set VERIFY_MEMBER_EMAIL / VERIFY_MEMBER_PASSWORD)')
+}
+if (env.VERIFY_MAPMASTER_EMAIL && env.VERIFY_MAPMASTER_PASSWORD) {
+  await mapmasterProbes(env.VERIFY_MAPMASTER_EMAIL, env.VERIFY_MAPMASTER_PASSWORD)
+} else {
+  console.log('note: mapmaster probes skipped (set VERIFY_MAPMASTER_EMAIL / VERIFY_MAPMASTER_PASSWORD)')
 }
 if (env.VERIFY_ADMIN_EMAIL && env.VERIFY_ADMIN_PASSWORD) {
   await adminProbes(env.VERIFY_ADMIN_EMAIL, env.VERIFY_ADMIN_PASSWORD)
