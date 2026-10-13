@@ -7,7 +7,7 @@ export const ICON_TYPES = {
 
 export const DEFAULT_COLOR_BY_KEY = Object.freeze({
   reported_major: '#FFEA00',
-  reported_non_major: '#C2185B',
+  reported_non_major: '#FFEA00',
   plundered: '#000000',
   krakened: '#1A237E',
   questionable: '#F57C00',
@@ -15,7 +15,7 @@ export const DEFAULT_COLOR_BY_KEY = Object.freeze({
 
 export const ALLOWED_COLORS_BY_KEY = Object.freeze({
   reported_major: ['#FFEA00', '#FBC02D'],
-  reported_non_major: ['#C2185B', '#FF5252'],
+  reported_non_major: ['#FFEA00', '#FBC02D'],
   plundered: ['#000000', '#424242', '#757575'],
   krakened: ['#1A237E', '#3949AB'],
   questionable: ['#F57C00'],
