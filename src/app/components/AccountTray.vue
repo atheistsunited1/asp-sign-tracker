@@ -17,8 +17,9 @@
     <template v-if="user">
       <div class="kv"><div class="kv-label">Pirate name</div><div class="kv-value">{{ accountUsername || '—' }}</div></div>
       <div class="kv"><div class="kv-label">Initials</div><div class="kv-value">{{ accountInitials || '—' }}</div></div>
+      <div class="kv"><div class="kv-label">Zip Code</div><div class="kv-value">{{ accountZip || '—' }}</div></div>
       <div class="kv" v-if="!pendingSignup">
-        <div class="kv-label">Member since</div>
+        <div class="kv-label">Onboarded</div>
         <div class="kv-value">{{ memberSinceLabel || '—' }}</div>
       </div>
     </template>
@@ -55,9 +56,9 @@ const memberSinceLabel = computed(() => {
 <style>
 /* Moved from App.vue. Global, not scoped — these selectors are also matched by other pages
    (e.g. .tray-x / .tray-section in the map tray), so scoping would change them. */
-.kv{ display:grid; grid-template-columns:96px 1fr; gap:8px; align-items:center; }
+.kv{ display:grid; grid-template-columns:96px 1fr; gap:2px; align-items:center; }
 .kv-label{ color:#9aa3af; font-size:12px; text-transform:uppercase; letter-spacing:.06em; }
-.kv-value{ color:#e5e7eb; font-weight:600; min-width:0; overflow-wrap:anywhere; }  /* long emails wrap instead of clipping */
+.kv-value{ color:#e5e7eb; font-size:12px; min-width:0; overflow-wrap:anywhere; }  /* long emails wrap instead of clipping */
 .tray-logout{ align-self:center; width:auto; text-align:center; padding:10px 18px; }
 .tray-actions-col{ display:flex; flex-direction:column; gap:8px; margin-top:6px; }
 .tray-action{
